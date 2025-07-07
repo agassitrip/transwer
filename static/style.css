@@ -1,0 +1,102 @@
+/* Custom properties for easy theme management */
+:root {
+    --color-primary: #14b8a6; /* teal-500 */
+    --color-secondary: #38bdf8; /* sky-400 */
+    --color-background: #0f172a; /* slate-900 */
+    --color-surface: #1e293b; /* slate-800 */
+    --color-surface-light: #334155; /* slate-700 */
+    --color-text: #e2e8f0; /* slate-200 */
+    --color-text-muted: #94a3b8; /* slate-400 */
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+}
+
+/* Gradient style for the logo */
+#logo {
+    background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Play/Pause Button Style */
+#play-pause-btn.listening {
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+}
+
+/* Style for suggestion boxes */
+.suggestion-box {
+    background-color: var(--color-surface);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    min-height: 100px;
+    color: var(--color-text-muted);
+    transition: all 0.3s ease;
+    border: 1px solid var(--color-surface-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.suggestion-box:hover {
+    background-color: var(--color-surface-light);
+    border-color: var(--color-secondary);
+    color: var(--color-text);
+    transform: translateY(-4px);
+}
+
+/* Styles for custom scrollbars */
+#stt-container::-webkit-scrollbar,
+#translation-container::-webkit-scrollbar {
+    width: 6px;
+}
+#stt-container::-webkit-scrollbar-track,
+#translation-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+#stt-container::-webkit-scrollbar-thumb,
+#translation-container::-webkit-scrollbar-thumb {
+    background-color: #4b5563; /* gray-600 */
+    border-radius: 10px;
+}
+
+/* Animation for the API status indicator */
+@keyframes pulse {
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.status-active {
+    background-color: #22c55e; /* green-500 */
+    box-shadow: 0 0 8px #22c55e;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+.status-inactive {
+    background-color: #6b7280; /* gray-500 */
+}
+.status-error {
+    background-color: #ef4444; /* red-500 */
+    box-shadow: 0 0 8px #ef4444;
+}
+
+/* Custom focus rings for better accessibility */
+input:focus, select:focus, button:focus {
+    outline: none;
+}
+input:focus-visible, select:focus-visible, button:focus-visible {
+    outline: 2px solid var(--color-secondary);
+    outline-offset: 2px;
+    border-radius: 0.375rem;
+}
+
+/* Close button on modal */
+#close-modal-btn {
+    font-size: 2rem;
+    line-height: 1;
+    font-weight: bold;
+}

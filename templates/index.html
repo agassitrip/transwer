@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transwer - AI Meeting Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* === GLOBAL STYLES === */
+        :root {
+            --color-primary: #14b8a6;
+            --color-secondary: #38bdf8;
+            --color-accent: #8b5cf6;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-error: #ef4444;
+            --color-background: #0f172a;
+            --color-surface: #1e293b;
+            --color-surface-light: #334155;
+            --color-text: #e2e8f0;
+            --color-text-muted: #94a3b8;
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--color-background) 0%, #1e293b 100%);
+            color: var(--color-text);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.5;
+            overflow: hidden;
+        }
+
+        /* === LOGO GRADIENT === */
+        #logo {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 200% 200%;
+            animation: gradientShift 6s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* === GLASSMORPHISM PANELS === */
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        /* === CONTROL BUTTON (REDESIGNED) === */
+        .control-btn {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            letter-spacing: 0.025em;
+            outline: none;
+            position: relative;
+            transition: var(--transition);
+            width: 80px;
+            height: 80px;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(20, 184, 166, 0.4);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        .control-btn.processing {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3);
+            background: linear-gradient(135deg, var(--color-error), #dc2626);
+        }
+
+        .control-btn::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .control-btn:hover::before {
+            opacity: 1;
+        }
+
+        /* === RESIZE HANDLES === */
+        .resize-handle {
+            background: var(--color-surface-light);
+            cursor: ns-resize;
+            height: 6px;
+            position: relative;
+            transition: var(--transition);
+            z-index: 10;
+        }
+
+        .resize-handle:hover {
+            background: var(--color-primary);
+            height: 8px;
+        }
+
+        .resize-handle::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+        }
+
+        /* === PANEL CONTAINERS === */
+        .panel-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            padding: 1rem 1.5rem 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
+        }
+
+        .panel-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+            text-transform: uppercase;
+        }
+
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--color-surface-light) transparent;
+        }
+
+        .panel-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .panel-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .panel-content::-webkit-scrollbar-thumb {
+            background: var(--color-surface-light);
+            border-radius: 3px;
+        }
+
+        .panel-content::-webkit-scrollbar-thumb:hover {
+            background: var(--color-primary);
+        }
+
+        /* === STATUS INDICATORS === */
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .status-active {
+            background: var(--color-success);
+            box-shadow: 0 0 12px var(--color-success);
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        .status-inactive {
+            background: var(--color-text-muted);
+        }
+
+        .status-error {
+            background: var(--color-error);
+            box-shadow: 0 0 12px var(--color-error);
+        }
+
+        /* === TEXT STYLING === */
+        .text-transcription {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            color: var(--color-text);
+        }
+
+        .text-partial {
+            opacity: 0.6;
+            font-style: italic;
+        }
+
+        .text-translation {
+            font-size: 1.25rem;
+            line-height: 1.6;
+            font-weight: 500;
+            color: var(--color-text);
+        }
+
+        /* === SUGGESTION CARDS === */
+        .suggestion-card {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            position: relative;
+            transition: var(--transition);
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .suggestion-card:hover {
+            border-color: rgba(139, 92, 246, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .suggestion-text {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .suggestion-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 0.75rem;
+        }
+
+        .suggestion-btn {
+            background: rgba(139, 92, 246, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: var(--color-accent);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .suggestion-btn:hover {
+            background: rgba(139, 92, 246, 0.4);
+            transform: scale(1.1);
+        }
+
+        /* === QUICK LANGUAGE SELECTOR === */
+        .lang-btn {
+            background: var(--color-surface);
+            border: 1px solid var(--color-surface-light);
+            border-radius: 6px;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            transition: var(--transition);
+        }
+
+        .lang-btn:hover,
+        .lang-btn.active {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* === NOTIFICATION SYSTEM === */
+        .notification {
+            background: var(--color-surface);
+            border: 1px solid var(--color-surface-light);
+            border-radius: var(--border-radius);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            color: var(--color-text);
+            font-weight: 500;
+            padding: 1rem 1.5rem;
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 1000;
+            max-width: 300px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            border-color: var(--color-success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .notification.error {
+            border-color: var(--color-error);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .notification.warning {
+            border-color: var(--color-warning);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        /* === MODAL STYLES === */
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: var(--color-surface);
+            border: 1px solid var(--color-surface-light);
+            border-radius: var(--border-radius);
+            box-shadow: 0 20px 64px rgba(0, 0, 0, 0.5);
+            max-height: 90vh;
+            overflow: hidden;
+        }
+
+        /* === FORM ELEMENTS === */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            color: var(--color-text);
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--color-surface-light);
+            border-radius: 8px;
+            color: var(--color-text);
+            font-size: 0.875rem;
+            padding: 0.75rem;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .form-input:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+            outline: none;
+        }
+
+        .form-select {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--color-surface-light);
+            border-radius: 8px;
+            color: var(--color-text);
+            font-size: 0.875rem;
+            padding: 0.75rem;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .form-select:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+            outline: none;
+        }
+
+        /* === RESPONSIVE DESIGN === */
+        @media (max-width: 768px) {
+            .suggestions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .control-btn {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .panel-content {
+                padding: 1rem;
+            }
+        }
+
+        /* === ANIMATIONS === */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER / CABEÇALHO -->
+    <header class="flex-shrink-0 border-b border-white/10 bg-black/20 backdrop-blur-lg">
+        <div class="container mx-auto flex items-center justify-between p-4">
+            <!-- Logo & Title / Logo e Título -->
+            <div class="flex items-center space-x-3">
+                <h1 id="logo" class="text-3xl font-bold tracking-tight">Transwer</h1>
+                <span class="text-2xl">🤖</span>
+            </div>
+
+            <!-- Status & Controls / Status e Controles -->
+            <div class="flex items-center space-x-4">
+                <!-- API Status / Status da API -->
+                <div class="flex items-center space-x-2">
+                    <div id="api-status-indicator" class="status-indicator status-inactive"></div>
+                    <span id="api-status-text" class="text-sm font-medium text-gray-300">Ready</span>
+                </div>
+
+                <!-- Settings Button / Botão de Configurações -->
+                <button id="settings-btn" 
+                        class="rounded-lg bg-white/5 p-2 text-gray-300 transition-colors hover:bg-white/10 hover:text-white"
+                        title="Settings / Configurações">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT / CONTEÚDO PRINCIPAL -->
+    <main class="flex flex-1 flex-col overflow-hidden">
+        <!-- Control Center / Centro de Controle -->
+        <div class="flex-shrink-0 p-6">
+            <div class="flex items-center justify-center">
+                <button id="control-btn" class="control-btn" title="Start/Stop Listening">
+                    <span id="control-icon">
+                        <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                        </svg>
+                    </span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Panels Container / Container dos Painéis -->
+        <div id="panels-container" class="flex flex-1 flex-col space-y-0 overflow-hidden p-4 pt-0">
+            
+            <!-- TRANSCRIPTION PANEL / PAINEL DE TRANSCRIÇÃO -->
+            <div id="transcription-panel" class="panel-container glass-panel" style="flex: 0 0 25%;">
+                <div class="panel-header">
+                    <h2 class="panel-title text-teal-400">
+                        <span class="mr-2">🎙️</span>
+                        Transcription (EN-US)
+                    </h2>
+                    <div class="flex items-center space-x-2">
+                        <button id="clear-transcription-btn" 
+                                class="rounded-md bg-teal-500/20 px-3 py-1 text-xs text-teal-300 transition-colors hover:bg-teal-500/40"
+                                title="Clear transcription / Limpar transcrição">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <div id="transcription-text" class="text-transcription">
+                        <!-- Final transcribed text / Texto transcrito final -->
+                        <span id="final-text"></span>
+                        <!-- Partial (real-time) text / Texto parcial (tempo real) -->
+                        <span id="partial-text" class="text-partial"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESIZE HANDLE / ALÇA DE REDIMENSIONAMENTO -->
+            <div class="resize-handle" data-target="transcription-panel" data-direction="vertical"></div>
+
+            <!-- TRANSLATION PANEL / PAINEL DE TRADUÇÃO -->
+            <div id="translation-panel" class="panel-container glass-panel" style="flex: 0 0 35%;">
+                <div class="panel-header">
+                    <h2 class="panel-title text-blue-400">
+                        <span class="mr-2">🌐</span>
+                        Translation
+                    </h2>
+                    <div class="flex items-center space-x-2">
+                        <button id="force-translate-btn" 
+                                class="rounded-md bg-blue-500/20 px-3 py-1 text-xs text-blue-300 transition-colors hover:bg-blue-500/40"
+                                title="Re-translate all text / Re-traduzir todo o texto">
+                            Force Translate
+                        </button>
+                        <button id="clear-translation-btn" 
+                                class="rounded-md bg-blue-500/20 px-3 py-1 text-xs text-blue-300 transition-colors hover:bg-blue-500/40"
+                                title="Clear translation / Limpar tradução">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <div id="translation-text" class="text-translation"></div>
+                </div>
+            </div>
+
+            <!-- RESIZE HANDLE / ALÇA DE REDIMENSIONAMENTO -->
+            <div class="resize-handle" data-target="translation-panel" data-direction="vertical"></div>
+
+            <!-- SUGGESTIONS PANEL / PAINEL DE SUGESTÕES -->
+            <div id="suggestions-panel" class="panel-container glass-panel" style="flex: 1;">
+                <div class="panel-header">
+                    <h2 class="panel-title text-purple-400">
+                        <span class="mr-2">💡</span>
+                        Response Suggestions
+                    </h2>
+                    <div class="flex items-center space-x-2">
+                        <button id="refresh-all-suggestions-btn" 
+                                class="rounded-md bg-purple-500/20 px-3 py-1 text-xs text-purple-300 transition-colors hover:bg-purple-500/40"
+                                title="Refresh all suggestions / Atualizar todas as sugestões">
+                            Refresh All
+                        </button>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <div id="suggestions-grid" class="suggestions-grid grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        <!-- Suggestion cards will be generated here / Cards de sugestão serão gerados aqui -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER / RODAPÉ -->
+    <footer class="flex-shrink-0 border-t border-white/10 bg-black/20 backdrop-blur-lg">
+        <div class="container mx-auto flex flex-col items-center justify-between gap-4 p-4 md:flex-row">
+            <!-- Copyright -->
+            <div class="text-sm text-gray-400">
+                Transwer © 2025 - AI Meeting Assistant
+            </div>
+
+            <!-- Quick Language Selection / Seleção Rápida de Idioma -->
+            <div class="flex items-center space-x-3">
+                <span class="text-sm font-medium text-gray-300">Quick Translate:</span>
+                <div id="lang-selector" class="flex space-x-1">
+                    <button class="lang-btn" data-lang="pt-BR" title="Português (Brasil)">PT-BR</button>
+                    <button class="lang-btn" data-lang="en-US" title="English (United States)">EN-US</button>
+                    <button class="lang-btn" data-lang="es" title="Español">ES</button>
+                    <button class="lang-btn" data-lang="ja" title="日本語">JA</button>
+                    <button class="lang-btn" data-lang="zh-CN" title="中文">ZH-CN</button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SETTINGS MODAL / MODAL DE CONFIGURAÇÕES -->
+    <div id="settings-modal" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4">
+        <div class="modal-content w-full max-w-4xl">
+            <!-- Modal Header / Cabeçalho do Modal -->
+            <div class="flex items-center justify-between border-b border-white/10 p-6">
+                <h2 class="text-2xl font-bold text-white">
+                    <span class="mr-2">⚙️</span>
+                    Settings / Configurações
+                </h2>
+                <button id="close-modal-btn" class="text-gray-400 hover:text-white">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Modal Content / Conteúdo do Modal -->
+            <div class="max-h-[60vh] overflow-y-auto p-6">
+                <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                    
+                    <!-- Audio Settings / Configurações de Áudio -->
+                    <div class="glass-panel p-4">
+                        <h3 class="mb-4 text-lg font-semibold text-teal-400">🎙️ Audio Settings</h3>
+                        <div class="form-group">
+                            <label class="form-label" for="audio-device-select">Input Device / Dispositivo de Entrada</label>
+                            <select id="audio-device-select" class="form-select">
+                                <option value="">Loading devices...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- STT Engine Settings / Configurações do Motor STT -->
+                    <div class="glass-panel p-4">
+                        <h3 class="mb-4 text-lg font-semibold text-blue-400">🎯 Speech Recognition</h3>
+                        <div class="form-group">
+                            <label class="form-label" for="stt-engine-select">STT Engine / Motor de Reconhecimento</label>
+                            <select id="stt-engine-select" class="form-select">
+                                <option value="vosk">Vosk (Local - Fast)</option>
+                                <option value="fast_whisper">FastWhisper (Local - Accurate)</option>
+                                <option value="google_stt_legacy">Google STT (Cloud - Legacy)</option>
+                                <option value="google_chirp">Google Chirp (Cloud - v2)</option>
+                            </select>
+                        </div>
+                        
+                        <!-- FastWhisper Options / Opções do FastWhisper -->
+                        <div id="fastwhisper-options" class="space-y-3 hidden">
+                            <div class="form-group">
+                                <label class="form-label" for="fastwhisper-model-select">Model Size</label>
+                                <select id="fastwhisper-model-select" class="form-select">
+                                    <option value="base">Base (Best Balance)</option>
+                                    <option value="small">Small (Faster)</option>
+                                    <option value="medium">Medium (More Accurate)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="fastwhisper-compute-select">Compute Type</label>
+                                <select id="fastwhisper-compute-select" class="form-select">
+                                    <option value="int8">INT8 (Faster)</option>
+                                    <option value="float16">Float16 (Better Quality)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Google Region Option / Opção de Região Google -->
+                        <div id="google-region-option" class="form-group hidden">
+                            <label class="form-label" for="google-region-input">Google Cloud Region</label>
+                            <input id="google-region-input" type="text" class="form-input" placeholder="us-central1">
+                        </div>
+                    </div>
+
+                    <!-- Translation Settings / Configurações de Tradução -->
+                    <div class="glass-panel p-4">
+                        <h3 class="mb-4 text-lg font-semibold text-purple-400">🌐 Translation & AI</h3>
+                        
+                        <div class="form-group">
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" id="disable-features-cb" class="rounded">
+                                <span class="form-label mb-0">Disable Translation & Suggestions</span>
+                            </label>
+                        </div>
+
+                        <div id="translation-options" class="space-y-4">
+                            <div class="form-group">
+                                <label class="form-label" for="translation-engine-select">Translation Engine</label>
+                                <select id="translation-engine-select" class="form-select">
+                                    <option value="openai">OpenAI (GPT-4o-mini)</option>
+                                    <option value="google_translate">Google Translate</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="language-select">Target Language / Idioma de Destino</label>
+                                <select id="language-select" class="form-select">
+                                    <option value="pt-BR">Português (Brasil)</option>
+                                    <option value="en-US">English (United States)</option>
+                                    <option value="es">Español</option>
+                                    <option value="ja">日本語 (Japanese)</option>
+                                    <option value="zh-CN">中文 (Chinese)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- API Credentials / Credenciais da API -->
+                    <div class="glass-panel p-4">
+                        <h3 class="mb-4 text-lg font-semibold text-yellow-400">🔑 API Credentials</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="api-key-input">OpenAI API Key</label>
+                            <input type="password" id="api-key-input" class="form-input" placeholder="sk-...">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="google-creds-input">Google Cloud JSON Credentials</label>
+                            <textarea id="google-creds-input" rows="4" class="form-input" 
+                                      placeholder="Paste your service account JSON here..."></textarea>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Modal Footer / Rodapé do Modal -->
+            <div class="border-t border-white/10 p-6">
+                <div class="flex justify-end space-x-4">
+                    <button id="cancel-settings-btn" 
+                            class="rounded-lg bg-gray-600 px-4 py-2 font-medium text-white transition-colors hover:bg-gray-500">
+                        Cancel / Cancelar
+                    </button>
+                    <button id="save-settings-btn" 
+                            class="rounded-lg bg-teal-600 px-4 py-2 font-medium text-white transition-colors hover:bg-teal-500">
+                        Save & Close / Salvar e Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICATION CONTAINER / CONTAINER DE NOTIFICAÇÕES -->
+    <div id="notification" class="notification"></div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js"></script>
+    <script>
+        // === TRANSWER FRONTEND CONTROLLER ===
+        // EN: Main application controller for Transwer
+        // PT: Controlador principal da aplicação Transwer
+        class TranswerApp {
+            constructor() {
+                this.socket = io();
+                this.isProcessing = false;
+                this.settings = {};
+                this.transcriptionBuffer = '';
+                this.translationBuffer = '';
+                
+                // EN: Initialize UI elements and event listeners
+                // PT: Inicializa elementos da UI e listeners de eventos
+                this.initializeElements();
+                this.setupEventListeners();
+                this.setupResizeHandles();
+                this.setupSocketHandlers();
+                
+                console.log('🤖 Transwer initialized / Transwer inicializado');
+            }
+
+            // === UI ELEMENT INITIALIZATION ===
+            // EN: Cache DOM elements for performance
+            // PT: Cache de elementos DOM para performance
+            initializeElements() {
+                this.elements = {
+                    // Control elements / Elementos de controle
+                    controlBtn: document.getElementById('control-btn'),
+                    controlIcon: document.getElementById('control-icon'),
+                    settingsBtn: document.getElementById('settings-btn'),
+                    
+                    // Status elements / Elementos de status
+                    apiStatusIndicator: document.getElementById('api-status-indicator'),
+                    apiStatusText: document.getElementById('api-status-text'),
+                    
+                    // Panel elements / Elementos de painel
+                    transcriptionText: document.getElementById('transcription-text'),
+                    finalText: document.getElementById('final-text'),
+                    partialText: document.getElementById('partial-text'),
+                    translationText: document.getElementById('translation-text'),
+                    suggestionsGrid: document.getElementById('suggestions-grid'),
+                    
+                    // Action buttons / Botões de ação
+                    clearTranscriptionBtn: document.getElementById('clear-transcription-btn'),
+                    forceTranslateBtn: document.getElementById('force-translate-btn'),
+                    clearTranslationBtn: document.getElementById('clear-translation-btn'),
+                    refreshAllSuggestionsBtn: document.getElementById('refresh-all-suggestions-btn'),
+                    
+                    // Language selector / Seletor de idioma
+                    langSelector: document.getElementById('lang-selector'),
+                    
+                    // Settings modal / Modal de configurações
+                    settingsModal: document.getElementById('settings-modal'),
+                    closeModalBtn: document.getElementById('close-modal-btn'),
+                    cancelSettingsBtn: document.getElementById('cancel-settings-btn'),
+                    saveSettingsBtn: document.getElementById('save-settings-btn'),
+                    
+                    // Settings form elements / Elementos do formulário de configurações
+                    audioDeviceSelect: document.getElementById('audio-device-select'),
+                    sttEngineSelect: document.getElementById('stt-engine-select'),
+                    translationEngineSelect: document.getElementById('translation-engine-select'),
+                    languageSelect: document.getElementById('language-select'),
+                    disableFeaturesCb: document.getElementById('disable-features-cb'),
+                    apiKeyInput: document.getElementById('api-key-input'),
+                    googleCredsInput: document.getElementById('google-creds-input'),
+                    fastwhisperOptions: document.getElementById('fastwhisper-options'),
+                    fastwhisperModelSelect: document.getElementById('fastwhisper-model-select'),
+                    fastwhisperComputeSelect: document.getElementById('fastwhisper-compute-select'),
+                    googleRegionOption: document.getElementById('google-region-option'),
+                    googleRegionInput: document.getElementById('google-region-input'),
+                    translationOptions: document.getElementById('translation-options'),
+                    
+                    // Notification / Notificação
+                    notification: document.getElementById('notification')
+                };
+            }
+
+            // === EVENT LISTENERS SETUP ===
+            // EN: Setup all UI event listeners
+            // PT: Configura todos os listeners de eventos da UI
+            setupEventListeners() {
+                // Main control button / Botão principal de controle
+                this.elements.controlBtn.addEventListener('click', () => this.toggleProcessing());
+                
+                // Settings modal / Modal de configurações
+                this.elements.settingsBtn.addEventListener('click', () => this.openSettings());
+                this.elements.closeModalBtn.addEventListener('click', () => this.closeSettings());
+                this.elements.cancelSettingsBtn.addEventListener('click', () => this.closeSettings());
+                this.elements.saveSettingsBtn.addEventListener('click', () => this.saveSettings());
+                
+                // Action buttons / Botões de ação
+                this.elements.clearTranscriptionBtn.addEventListener('click', () => this.clearTranscription());
+                this.elements.forceTranslateBtn.addEventListener('click', () => this.forceTranslate());
+                this.elements.clearTranslationBtn.addEventListener('click', () => this.clearTranslation());
+                this.elements.refreshAllSuggestionsBtn.addEventListener('click', () => this.refreshAllSuggestions());
+                
+                // Language selector / Seletor de idioma
+                this.elements.langSelector.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('lang-btn')) {
+                        this.changeLanguage(e.target.dataset.lang);
+                    }
+                });
+                
+                // Settings form changes / Mudanças no formulário de configurações
+                this.elements.sttEngineSelect.addEventListener('change', () => this.updateSettingsUI());
+                this.elements.disableFeaturesCb.addEventListener('change', () => this.updateSettingsUI());
+                
+                // Keyboard shortcuts / Atalhos de teclado
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === ' ' && e.ctrlKey) {
+                        e.preventDefault();
+                        this.toggleProcessing();
+                    }
+                });
+            }
+
+            // === RESIZE HANDLES SETUP ===
+            // EN: Setup panel resizing functionality
+            // PT: Configura funcionalidade de redimensionamento de painéis
+            setupResizeHandles() {
+                const resizeHandles = document.querySelectorAll('.resize-handle');
+                
+                resizeHandles.forEach(handle => {
+                    let isResizing = false;
+                    let startY = 0;
+                    let startHeight = 0;
+                    let targetPanel = null;
+                    
+                    handle.addEventListener('mousedown', (e) => {
+                        e.preventDefault();
+                        isResizing = true;
+                        startY = e.clientY;
+                        
+                        // EN: Find the target panel to resize
+                        // PT: Encontra o painel alvo para redimensionar
+                        const targetId = handle.dataset.target;
+                        targetPanel = document.getElementById(targetId);
+                        startHeight = targetPanel.getBoundingClientRect().height;
+                        
+                        document.addEventListener('mousemove', handleMouseMove);
+                        document.addEventListener('mouseup', handleMouseUp);
+                        
+                        // EN: Add visual feedback
+                        // PT: Adiciona feedback visual
+                        handle.style.background = 'var(--color-primary)';
+                        document.body.style.cursor = 'ns-resize';
+                    });
+                    
+                    const handleMouseMove = (e) => {
+                        if (!isResizing || !targetPanel) return;
+                        
+                        const deltaY = e.clientY - startY;
+                        const newHeight = Math.max(100, startHeight + deltaY);
+                        const totalHeight = document.getElementById('panels-container').offsetHeight;
+                        const newFlexBasis = (newHeight / totalHeight) * 100;
+                        
+                        // EN: Apply new size with constraints
+                        // PT: Aplica novo tamanho com restrições
+                        if (newFlexBasis >= 10 && newFlexBasis <= 70) {
+                            targetPanel.style.flex = `0 0 ${newFlexBasis}%`;
+                        }
+                    };
+                    
+                    const handleMouseUp = () => {
+                        isResizing = false;
+                        targetPanel = null;
+                        
+                        document.removeEventListener('mousemove', handleMouseMove);
+                        document.removeEventListener('mouseup', handleMouseUp);
+                        
+                        // EN: Remove visual feedback
+                        // PT: Remove feedback visual
+                        handle.style.background = '';
+                        document.body.style.cursor = '';
+                        
+                        // EN: Save layout preferences
+                        // PT: Salva preferências de layout
+                        this.saveLayoutPreferences();
+                    };
+                });
+            }
+
+            // === SOCKET.IO HANDLERS ===
+            // EN: Setup WebSocket event handlers
+            // PT: Configura handlers de eventos WebSocket
+            setupSocketHandlers() {
+                this.socket.on('connect', () => {
+                    console.log('🔌 Connected to server / Conectado ao servidor');
+                    this.updateApiStatus('inactive', 'Ready / Pronto');
+                    this.initializeSuggestions();
+                });
+
+                this.socket.on('disconnect', () => {
+                    console.log('⚠️ Disconnected from server / Desconectado do servidor');
+                    this.updateApiStatus('error', 'Disconnected / Desconectado');
+                });
+
+                this.socket.on('config_loaded', (config) => {
+                    console.log('⚙️ Settings loaded / Configurações carregadas', config);
+                    this.loadSettings(config);
+                });
+
+                this.socket.on('audio_devices_list', (devices) => {
+                    this.populateAudioDevices(devices);
+                });
+
+                this.socket.on('processing_started', () => {
+                    this.isProcessing = true;
+                    this.updateControlButton();
+                    this.updateApiStatus('active', 'Listening... / Ouvindo...');
+                    this.clearDisplays();
+                });
+
+                this.socket.on('processing_stopped', () => {
+                    this.isProcessing = false;
+                    this.updateControlButton();
+                    this.updateApiStatus('inactive', 'Paused / Pausado');
+                });
+
+                this.socket.on('update_stt', (data) => {
+                    this.updateTranscription(data);
+                });
+
+                this.socket.on('update_translation', (data) => {
+                    this.updateTranslation(data);
+                });
+
+                this.socket.on('clear_translation', () => {
+                    this.elements.translationText.textContent = '';
+                    this.translationBuffer = '';
+                });
+
+                this.socket.on('update_one_suggestion', (data) => {
+                    this.updateSuggestion(data);
+                });
+
+                this.socket.on('notification', (data) => {
+                    this.showNotification(data.message, data.status);
+                });
+
+                this.socket.on('api_status', (data) => {
+                    this.updateApiStatus(data.status, data.message);
+                });
+            }
+
+            // === CORE FUNCTIONALITY ===
+            // EN: Toggle processing state
+            // PT: Alterna estado de processamento
+            toggleProcessing() {
+                this.elements.controlBtn.disabled = true;
+                
+                if (this.isProcessing) {
+                    this.socket.emit('stop_processing');
+                } else {
+                    // EN: Gather current settings before starting
+                    // PT: Coleta configurações atuais antes de iniciar
+                    const currentSettings = this.gatherCurrentSettings();
+                    this.socket.emit('start_processing', currentSettings);
+                }
+            }
+
+            // EN: Gather settings from UI form
+            // PT: Coleta configurações do formulário da UI
+            gatherCurrentSettings() {
+                return {
+                    sttEngine: this.elements.sttEngineSelect.value,
+                    translationEngine: this.elements.translationEngineSelect.value,
+                    googleCreds: this.elements.googleCredsInput.value,
+                    apiKey: this.elements.apiKeyInput.value,
+                    audioDevice: parseInt(this.elements.audioDeviceSelect.value, 10),
+                    translationLang: this.elements.languageSelect.value,
+                    translationDisabled: this.elements.disableFeaturesCb.checked,
+                    suggestionsEnabled: !this.elements.disableFeaturesCb.checked,
+                    fastwhisperModel: this.elements.fastwhisperModelSelect.value,
+                    computeType: this.elements.fastwhisperComputeSelect.value,
+                    googleRegion: this.elements.googleRegionInput.value
+                };
+            }
+
+            // === UI UPDATES ===
+            // EN: Update the main control button appearance
+            // PT: Atualiza aparência do botão principal de controle
+            updateControlButton() {
+                const btn = this.elements.controlBtn;
+                const icon = this.elements.controlIcon;
+                
+                setTimeout(() => {
+                    btn.disabled = false;
+                }, 500);
+                
+                if (this.isProcessing) {
+                    btn.classList.add('processing');
+                    btn.title = 'Stop Listening / Parar de Ouvir';
+                    icon.innerHTML = `
+                        <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z" clip-rule="evenodd"/>
+                        </svg>
+                    `;
+                } else {
+                    btn.classList.remove('processing');
+                    btn.title = 'Start Listening / Iniciar Escuta';
+                    icon.innerHTML = `
+                        <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                        </svg>
+                    `;
+                }
+            }
+
+            // EN: Update API connection status
+            // PT: Atualiza status da conexão da API
+            updateApiStatus(status, message) {
+                const indicator = this.elements.apiStatusIndicator;
+                const text = this.elements.apiStatusText;
+                
+                // EN: Remove all status classes
+                // PT: Remove todas as classes de status
+                indicator.className = 'status-indicator';
+                indicator.classList.add(`status-${status}`);
+                
+                text.textContent = message;
+                indicator.title = `API Status: ${message}`;
+            }
+
+            // EN: Update transcription display
+            // PT: Atualiza exibição da transcrição
+            updateTranscription(data) {
+                if (data.is_partial) {
+                    // EN: Update partial (real-time) text
+                    // PT: Atualiza texto parcial (tempo real)
+                    this.elements.partialText.textContent = data.text;
+                } else {
+                    // EN: Add to final text and clear partial
+                    // PT: Adiciona ao texto final e limpa parcial
+                    this.transcriptionBuffer += ` ${data.text}`;
+                    this.elements.finalText.textContent = this.transcriptionBuffer;
+                    this.elements.partialText.textContent = '';
+                    
+                    // EN: Auto-scroll to bottom
+                    // PT: Rola automaticamente para o final
+                    this.elements.transcriptionText.scrollTop = this.elements.transcriptionText.scrollHeight;
+                }
+            }
+
+            // EN: Update translation display
+            // PT: Atualiza exibição da tradução
+            updateTranslation(data) {
+                this.translationBuffer += ` ${data.text}`;
+                this.elements.translationText.textContent = this.translationBuffer;
+                
+                // EN: Auto-scroll to bottom
+                // PT: Rola automaticamente para o final
+                this.elements.translationText.scrollTop = this.elements.translationText.scrollHeight;
+            }
+
+            // EN: Update individual suggestion
+            // PT: Atualiza sugestão individual
+            updateSuggestion(data) {
+                const suggestionCard = this.elements.suggestionsGrid.querySelector(`[data-index="${data.index}"]`);
+                if (suggestionCard) {
+                    const textElement = suggestionCard.querySelector('.suggestion-text');
+                    textElement.textContent = data.suggestion;
+                    textElement.classList.remove('text-gray-400');
+                    textElement.classList.add('text-white');
+                }
+            }
+
+            // === UTILITY FUNCTIONS ===
+            // EN: Show notification to user
+            // PT: Mostra notificação para o usuário
+            showNotification(message, type = 'info') {
+                const notification = this.elements.notification;
+                
+                notification.textContent = message;
+                notification.className = `notification ${type}`;
+                notification.classList.add('show');
+                
+                // EN: Auto-hide after 4 seconds
+                // PT: Oculta automaticamente após 4 segundos
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 4000);
+            }
+
+            // EN: Initialize suggestion cards
+            // PT: Inicializa cards de sugestão
+            initializeSuggestions() {
+                this.elements.suggestionsGrid.innerHTML = '';
+                
+                for (let i = 0; i < 3; i++) {
+                    const card = this.createSuggestionCard(i);
+                    this.elements.suggestionsGrid.appendChild(card);
+                }
+            }
+
+            // EN: Create a suggestion card element
+            // PT: Cria elemento de card de sugestão
+            createSuggestionCard(index) {
+                const card = document.createElement('div');
+                card.className = 'suggestion-card fade-in';
+                card.dataset.index = index;
+                
+                card.innerHTML = `
+                    <div class="suggestion-text text-gray-400">
+                        Waiting for transcription...
+                    </div>
+                    <div class="suggestion-actions">
+                        <button class="suggestion-btn" onclick="app.refreshSuggestion(${index})" title="Refresh suggestion">
+                            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 110 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </div>
+                `;
+                
+                return card;
+            }
+
+            // === ACTION HANDLERS ===
+            // EN: Clear transcription display and buffer
+            // PT: Limpa exibição e buffer da transcrição
+            clearTranscription() {
+                this.transcriptionBuffer = '';
+                this.elements.finalText.textContent = '';
+                this.elements.partialText.textContent = '';
+                this.showNotification('Transcription cleared / Transcrição limpa', 'info');
+            }
+
+            // EN: Clear translation display and buffer
+            // PT: Limpa exibição e buffer da tradução
+            clearTranslation() {
+                this.translationBuffer = '';
+                this.elements.translationText.textContent = '';
+                this.showNotification('Translation cleared / Tradução limpa', 'info');
+            }
+
+            // EN: Force translate all transcribed text
+            // PT: Força tradução de todo o texto transcrito
+            forceTranslate() {
+                if (!this.transcriptionBuffer.trim()) {
+                    this.showNotification('Nothing to translate / Nada para traduzir', 'warning');
+                    return;
+                }
+                
+                const currentSettings = this.gatherCurrentSettings();
+                this.socket.emit('force_translate', currentSettings);
+                this.showNotification('Forcing translation... / Forçando tradução...', 'info');
+            }
+
+            // EN: Refresh individual suggestion
+            // PT: Atualiza sugestão individual
+            refreshSuggestion(index) {
+                if (!this.isProcessing && !this.transcriptionBuffer.trim()) {
+                    this.showNotification('Start listening to get suggestions / Inicie a escuta para obter sugestões', 'info');
+                    return;
+                }
+                
+                const currentSettings = this.gatherCurrentSettings();
+                currentSettings.index = index;
+                
+                const card = this.elements.suggestionsGrid.querySelector(`[data-index="${index}"]`);
+                const textElement = card.querySelector('.suggestion-text');
+                textElement.textContent = 'Generating...';
+                textElement.className = 'suggestion-text text-gray-400';
+                
+                this.socket.emit('regenerate_suggestion', {
+                    index: index,
+                    config: currentSettings
+                });
+            }
+
+            // EN: Refresh all suggestions
+            // PT: Atualiza todas as sugestões
+            refreshAllSuggestions() {
+                for (let i = 0; i < 3; i++) {
+                    this.refreshSuggestion(i);
+                }
+            }
+
+            // EN: Change translation language quickly
+            // PT: Muda idioma de tradução rapidamente
+            changeLanguage(langCode) {
+                // EN: Update UI
+                // PT: Atualiza UI
+                const langButtons = this.elements.langSelector.querySelectorAll('.lang-btn');
+                langButtons.forEach(btn => btn.classList.remove('active'));
+                
+                const activeBtn = this.elements.langSelector.querySelector(`[data-lang="${langCode}"]`);
+                if (activeBtn) {
+                    activeBtn.classList.add('active');
+                }
+                
+                // EN: Update settings
+                // PT: Atualiza configurações
+                this.elements.languageSelect.value = langCode;
+                this.saveSettings();
+                
+                // EN: Show notification
+                // PT: Mostra notificação
+                this.showNotification(`Translation language set to ${langCode} / Idioma de tradução definido para ${langCode}`, 'success');
+                
+                // EN: Re-translate if processing
+                // PT: Re-traduz se estiver processando
+                if (this.isProcessing) {
+                    setTimeout(() => this.forceTranslate(), 500);
+                }
+            }
+
+            // === SETTINGS MANAGEMENT ===
+            // EN: Open settings modal
+            // PT: Abre modal de configurações
+            openSettings() {
+                this.elements.settingsModal.classList.remove('hidden');
+                this.elements.settingsModal.classList.add('flex');
+            }
+
+            // EN: Close settings modal
+            // PT: Fecha modal de configurações
+            closeSettings() {
+                this.elements.settingsModal.classList.add('hidden');
+                this.elements.settingsModal.classList.remove('flex');
+            }
+
+            // EN: Load settings into UI
+            // PT: Carrega configurações na UI
+            loadSettings(settings) {
+                // EN: Load from localStorage first, then server config
+                // PT: Carrega do localStorage primeiro, depois config do servidor
+                const localSettings = localStorage.getItem('transwerSettings_v9');
+                let settingsToApply = settings;
+                
+                if (localSettings) {
+                    try {
+                        settingsToApply = JSON.parse(localSettings);
+                    } catch (e) {
+                        console.error('Error parsing local settings:', e);
+                    }
+                }
+                
+                this.settings = settingsToApply;
+                this.applySettingsToUI(settingsToApply);
+            }
+
+            // EN: Apply settings to UI elements
+            // PT: Aplica configurações aos elementos da UI
+            applySettingsToUI(settings) {
+                if (!settings) return;
+                
+                // EN: Apply all settings to form elements
+                // PT: Aplica todas as configurações aos elementos do formulário
+                this.elements.sttEngineSelect.value = settings.sttEngine || 'vosk';
+                this.elements.translationEngineSelect.value = settings.translationEngine || 'openai';
+                this.elements.googleCredsInput.value = settings.googleCreds || '';
+                this.elements.apiKeyInput.value = settings.apiKey || '';
+                this.elements.audioDeviceSelect.value = settings.audioDevice || 0;
+                this.elements.languageSelect.value = settings.translationLang || 'pt-BR';
+                this.elements.disableFeaturesCb.checked = settings.translationDisabled || false;
+                this.elements.fastwhisperModelSelect.value = settings.fastwhisperModel || 'base';
+                this.elements.fastwhisperComputeSelect.value = settings.computeType || 'int8';
+                this.elements.googleRegionInput.value = settings.googleRegion || 'us-central1';
+                
+                // EN: Update language selector in footer
+                // PT: Atualiza seletor de idioma no rodapé
+                const activeBtn = this.elements.langSelector.querySelector(`[data-lang="${settings.translationLang || 'pt-BR'}"]`);
+                if (activeBtn) {
+                    this.elements.langSelector.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+                    activeBtn.classList.add('active');
+                }
+                
+                this.updateSettingsUI();
+            }
+
+            // EN: Update settings UI based on selections
+            // PT: Atualiza UI de configurações baseado nas seleções
+            updateSettingsUI() {
+                const sttEngine = this.elements.sttEngineSelect.value;
+                const isDisabled = this.elements.disableFeaturesCb.checked;
+                
+                // EN: Show/hide engine-specific options
+                // PT: Mostra/oculta opções específicas do motor
+                this.elements.fastwhisperOptions.classList.toggle('hidden', sttEngine !== 'fast_whisper');
+                this.elements.googleRegionOption.classList.toggle('hidden', sttEngine !== 'google_chirp');
+                this.elements.translationOptions.classList.toggle('hidden', isDisabled);
+            }
+
+            // EN: Save current settings
+            // PT: Salva configurações atuais
+            saveSettings() {
+                const newSettings = this.gatherCurrentSettings();
+                
+                // EN: Save to localStorage and server
+                // PT: Salva no localStorage e servidor
+                localStorage.setItem('transwerSettings_v9', JSON.stringify(newSettings));
+                this.socket.emit('save_settings', newSettings);
+                this.settings = newSettings;
+                
+                this.showNotification('Settings saved! / Configurações salvas!', 'success');
+                this.closeSettings();
+            }
+
+            // EN: Populate audio device dropdown
+            // PT: Popula dropdown de dispositivos de áudio
+            populateAudioDevices(devices) {
+                this.elements.audioDeviceSelect.innerHTML = '';
+                
+                if (!devices || devices.length === 0) {
+                    this.elements.audioDeviceSelect.innerHTML = '<option value="">No devices found</option>';
+                    return;
+                }
+                
+                devices.forEach(device => {
+                    const option = document.createElement('option');
+                    option.value = device.id;
+                    option.textContent = `${device.id}: ${device.name.substring(0, 50)}${device.name.length > 50 ? '...' : ''}`;
+                    this.elements.audioDeviceSelect.appendChild(option);
+                });
+                
+                // EN: Set selected device if in settings
+                // PT: Define dispositivo selecionado se nas configurações
+                if (this.settings.audioDevice !== undefined) {
+                    this.elements.audioDeviceSelect.value = this.settings.audioDevice;
+                }
+            }
+
+            // EN: Clear all displays (transcription, translation, suggestions)
+            // PT: Limpa todas as exibições (transcrição, tradução, sugestões)
+            clearDisplays() {
+                this.transcriptionBuffer = '';
+                this.translationBuffer = '';
+                this.elements.finalText.textContent = '';
+                this.elements.partialText.textContent = '';
+                this.elements.translationText.textContent = '';
+                this.initializeSuggestions();
+            }
+
+            // EN: Save layout preferences to localStorage
+            // PT: Salva preferências de layout no localStorage
+            saveLayoutPreferences() {
+                const panels = {
+                    transcription: document.getElementById('transcription-panel').style.flex,
+                    translation: document.getElementById('translation-panel').style.flex,
+                    suggestions: document.getElementById('suggestions-panel').style.flex
+                };
+                
+                localStorage.setItem('transwerLayout', JSON.stringify(panels));
+            }
+
+            // EN: Load layout preferences from localStorage
+            // PT: Carrega preferências de layout do localStorage
+            loadLayoutPreferences() {
+                const saved = localStorage.getItem('transwerLayout');
+                if (saved) {
+                    try {
+                        const panels = JSON.parse(saved);
+                        if (panels.transcription) document.getElementById('transcription-panel').style.flex = panels.transcription;
+                        if (panels.translation) document.getElementById('translation-panel').style.flex = panels.translation;
+                        if (panels.suggestions) document.getElementById('suggestions-panel').style.flex = panels.suggestions;
+                    } catch (e) {
+                        console.error('Error loading layout preferences:', e);
+                    }
+                }
+            }
+        }
+
+        // === APPLICATION INITIALIZATION ===
+        // EN: Initialize the application when DOM is ready
+        // PT: Inicializa a aplicação quando o DOM estiver pronto
+        let app;
+        document.addEventListener('DOMContentLoaded', () => {
+            app = new TranswerApp();
+            
+            // EN: Load layout preferences after initialization
+            // PT: Carrega preferências de layout após inicialização
+            setTimeout(() => {
+                app.loadLayoutPreferences();
+            }, 100);
+            
+            console.log('🚀 Transwer ready! / Transwer pronto!');
+        });
+
+        // EN: Make app globally available for debugging
+        // PT: Torna app globalmente disponível para debug
+        window.app = app;
+    </script>
+</body>
+</html>
