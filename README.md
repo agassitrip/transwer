@@ -1,211 +1,166 @@
-# 🚀 Transwer - Complete Refactoring Summary
-## Resumo Completo da Refatoração Transwer
+# Transwer - AI Meeting Assistant
 
----
+Transwer is a powerful real-time AI-powered meeting assistant that provides live transcription, translation, and intelligent response suggestions. Perfect for multilingual meetings, accessibility needs, and content creation.
 
-## ✅ **IMPLEMENTATION CHECKLIST / CHECKLIST DE IMPLEMENTAÇÃO**
+## 🚀 Features
 
-### 🎨 **Frontend (UI/UX) - COMPLETED / CONCLUÍDO**
-- [x] **Botão Start/Stop Redesign** ✨
-  - ✅ Removido design extravagante e criado botão profissional limpo
-  - ✅ Feedback visual melhorado com estados (ativo/inativo/processando)
-  - ✅ Animações suaves e hover effects
+### Real-time Speech Transcription
+- **Multiple STT Engines**: Support for Vosk (offline), Faster Whisper (offline), Google Cloud Speech-to-Text, and Google Chirp
+- **Live Transcription**: See both partial (real-time) and final transcriptions
+- **Audio Device Selection**: Choose from available input devices
+- **High Accuracy**: Professional-grade speech recognition
 
-- [x] **Sistema de Redimensionamento** 🖱️
-  - ✅ Implementado resize handles entre containers estilo Windows
-  - ✅ Funcionamento smooth com constraints de tamanho mínimo/máximo
-  - ✅ Persistência de layout salva no localStorage
-  - ✅ Feedback visual durante redimensionamento
+### Intelligent Translation
+- **AI-Powered Translation**: Uses OpenAI GPT-4o-mini or Google Translate
+- **Multiple Languages**: Supports Portuguese (BR), English (US), Spanish, Japanese, and Chinese
+- **Background Processing**: Non-blocking translation with queue system
+- **Force Translation**: Translate entire transcription buffer on demand
 
-- [x] **Interface de Configurações** ⚙️
-  - ✅ Layout mais intuitivo com agrupamento lógico
-  - ✅ Validação em tempo real das configurações
-  - ✅ Design glassmorphism moderno
-  - ✅ Feedback visual melhorado
+### Smart Response Suggestions
+- **AI-Generated Suggestions**: Context-aware response suggestions using OpenAI
+- **Professional Responses**: Concise suggestions (max 20 words) suitable for business meetings
+- **Individual Refresh**: Update suggestions individually as needed
+- **Real-time Updates**: Suggestions update based on conversation context
 
-### 🎙️ **Transcrição (TTS/STT) - COMPLETED / CONCLUÍDO**
-- [x] **Isolamento do Campo TTS** 🎯
-  - ✅ Campo sempre ativo e independente
-  - ✅ Buffer dedicado thread-safe para transcrição
-  - ✅ Separação clara entre texto final e parcial
-  - ✅ Scroll automático inteligente
+### Modern User Interface
+- **Glassmorphism Design**: Beautiful dark theme with glass effects
+- **Resizable Panels**: Adjust layout to your preference with drag handles
+- **Real-time Status**: Visual indicators for API connection and processing status
+- **Quick Language Switch**: Fast language selection in the footer
+- **Responsive Design**: Works on various screen sizes
 
-### 🌐 **Tradução - COMPLETED / CONCLUÍDO**
-- [x] **Tradução em Tempo Real Melhorada** ⚡
-  - ✅ Corrigido atraso na tradução com sistema de filas
-  - ✅ Eliminada poluição de texto com debouncing
-  - ✅ Implementado chunking otimizado para APIs
-  - ✅ Background processing para não bloquear UI
+## 🛠️ Technical Stack
 
-- [x] **Force Translation Fix** 🔧
-  - ✅ Corrigido seletor de elemento para usar buffer correto
-  - ✅ Implementada validação de conteúdo
-  - ✅ Melhorado feedback visual durante processo
-  - ✅ Clear translation functionality
+### Backend
+- Python 3.x with Flask framework
+- Flask-SocketIO for real-time WebSocket communication
+- Multi-threaded architecture for audio processing
+- Queue-based translation system
+- Thread-safe state management
 
-- [x] **Seleção de Idiomas (Footer)** 🌍
-  - ✅ PT-BR, EN-US, Espanhol, Japonês, Chinês
-  - ✅ Botões de acesso rápido com visual atrativo
-  - ✅ Troca dinâmica de idioma em tempo real
-  - ✅ Persistência da seleção
+### Frontend
+- Vanilla JavaScript (ES6+)
+- TailwindCSS for styling
+- Socket.IO client for real-time updates
+- Local storage for settings persistence
 
-### 💡 **Sugestões - COMPLETED / CONCLUÍDO**
-- [x] **Baseadas no TTS** 🧠
-  - ✅ Usar conteúdo transcrito como contexto completo
-  - ✅ Relevância melhorada das sugestões
-  - ✅ Atualização em tempo real
-  - ✅ Sistema de refresh individual e em lote
+### AI Services
+- OpenAI API (GPT-4o-mini)
+- Google Cloud Speech-to-Text API
+- Google Translate API
+- Vosk (offline STT)
+- Faster Whisper (offline STT)
 
-### 🔧 **Backend (Arquitetura) - COMPLETED / CONCLUÍDO**
-- [x] **Isolamento de Módulos** 🏗️
-  - ✅ Separação clara STT, tradução e sugestões
-  - ✅ Buffers independentes thread-safe
-  - ✅ Threading otimizado com worker threads
-  - ✅ Gerenciamento de estado centralizado (TranswerState)
+## 📋 Requirements
 
-- [x] **Performance da Tradução** 🚀
-  - ✅ Otimização de chunking de texto
-  - ✅ Rate limiting inteligente
-  - ✅ Sistema de filas para processamento assíncrono
-  - ✅ Retry mechanism para APIs
+- Python 3.7 or higher
+- Audio input device (microphone)
+- API keys for cloud services (optional for offline modes)
+- 4GB RAM minimum (8GB recommended for Faster Whisper)
 
-### 📝 **Documentação - COMPLETED / CONCLUÍDO**
-- [x] **Comentários Bilíngues** 🌍
-  - ✅ PT-BR para contexto brasileiro
-  - ✅ EN-US para comunidade internacional
-  - ✅ Documentação inline completa
-  - ✅ README abrangente para GitHub
+## 🔧 Installation
 
-### 🧪 **Testes e Validação - COMPLETED / CONCLUÍDO**
-- [x] **Validação de Funcionalidades** ✅
-  - ✅ Script de setup automatizado
-  - ✅ Teste de todos os engines STT disponíveis
-  - ✅ Validação de configurações
-  - ✅ Teste de dispositivos de áudio
-
----
-
-## 📁 **FILES CREATED / ARQUIVOS CRIADOS**
-
-### **Core Application / Aplicação Principal**
-```
-📄 index.html (REFACTORED)          - Frontend completamente reescrito
-📄 app.py (REFACTORED)              - Backend completamente refatorado
-```
-
-### **Documentation / Documentação**
-```
-📄 README.md                        - Documentação completa bilíngue
-📄 CHANGELOG.md                     - Histórico de mudanças detalhado
-📄 requirements.txt                 - Dependências Python organizadas
-📄 .env.example                     - Template configuração ambiente
-📄 .gitignore                       - Regras Git ignore abrangentes
-📄 setup.py                         - Script instalação automatizada
-```
-
----
-
-## 🔥 **KEY IMPROVEMENTS / MELHORIAS PRINCIPAIS**
-
-### **1. User Experience / Experiência do Usuário**
-- **Visual Design**: Glassmorphism moderno com tema escuro profissional
-- **Responsiveness**: Interface responsiva para diferentes tamanhos de tela  
-- **Interactivity**: Painéis redimensionáveis estilo Windows
-- **Accessibility**: Melhor contraste, indicadores visuais e feedback
-
-### **2. Performance / Performance**
-- **Real-time Processing**: Sistema de filas para tradução não-bloqueante
-- **Memory Management**: Buffers thread-safe e garbage collection adequado
-- **Network Optimization**: Rate limiting e retry mechanisms para APIs
-- **Audio Processing**: Buffer management otimizado para baixa latência
-
-### **3. Architecture / Arquitetura**
-- **Separation of Concerns**: Módulos isolados e responsabilidades claras
-- **State Management**: Sistema centralizado thread-safe (TranswerState)
-- **Error Handling**: Tratamento robusto de erros em todos os níveis
-- **Scalability**: Estrutura preparada para features futuras
-
-### **4. Developer Experience / Experiência do Desenvolvedor**
-- **Code Quality**: Clean code com naming conventions consistentes
-- **Documentation**: Comentários bilíngues e documentação abrangente
-- **Setup Process**: Script automatizado para instalação e configuração
-- **Maintainability**: Estrutura modular fácil de manter e expandir
-
----
-
-## 🎯 **SOLVED PROBLEMS / PROBLEMAS RESOLVIDOS**
-
-### **Critical Issues / Problemas Críticos**
-✅ **Force Translation Bug**: Corrigido para usar buffer correto  
-✅ **Translation Lag**: Eliminado com sistema de filas assíncronas  
-✅ **Translation Pollution**: Resolvido com debouncing e chunking  
-✅ **Buffer Sync Issues**: Implementação thread-safe  
-✅ **Memory Leaks**: Cleanup adequado de threads e recursos  
-
-### **UI/UX Issues / Problemas UI/UX**
-✅ **Extravagant Button**: Redesignado para visual profissional  
-✅ **Static Panels**: Implementado sistema de redimensionamento  
-✅ **Poor Settings UI**: Reorganizado com melhor UX  
-✅ **Language Switching**: Implementação dinâmica no footer  
-✅ **Status Feedback**: Indicadores visuais melhorados  
-
-### **Architecture Issues / Problemas Arquitetura**
-✅ **Global State Mess**: Sistema centralizado com TranswerState  
-✅ **Mixed Languages**: Padronização bilíngue EN/PT  
-✅ **Poor Error Handling**: Sistema robusto de tratamento  
-✅ **Threading Issues**: Worker threads adequados  
-✅ **Code Duplication**: Refatoração com reutilização  
-
----
-
-## 🚀 **GITHUB**
-
-### **Repository Structure / Estrutura do Repositório**
-```
-transwer/
-├── 📄 README.md                    # Complete documentation
-├── 📄 CHANGELOG.md                 # Version history  
-├── 📄 LICENSE                      # MIT License
-├── 📄 requirements.txt             # Python dependencies
-├── 📄 setup.py                     # Automated setup
-├── 📄 .env.example                 # Environment template
-├── 📄 .gitignore                   # Git ignore rules
-├── 📄 app.py                       # Main Flask application
-├── 📁 templates/
-│   └── 📄 index.html              # Frontend interface
-├── 📁 static/                      # Static assets (if any)
-├── 📁 vosk-model-en-us/           # Vosk model (downloaded)
-└── 📁 docs/                       # Additional documentation
-```
-
-### **GitHub Features Ready / Recursos GitHub Prontos**
-✅ **Complete README** with installation instructions  
-✅ **Bilingual documentation** for international community  
-✅ **Issues templates** ready for bug reports and features  
-✅ **Contributing guidelines** for collaboration  
-✅ **Comprehensive .gitignore** for security  
-✅ **Automated setup script** for easy onboarding  
-
----
-
-
-## 📞 **DEPLOYMENT COMMANDS / COMANDOS DE DEPLOY**
-
+1. Clone the repository:
 ```bash
-# 1. Setup new repository
-git init
-git add .
-git commit -m "🚀 Transwer v2.0 - Complete refactor with modern UI and architecture"
-
-# 2. Connect to GitHub
-git remote add origin https://github.com/yourusername/transwer.git
-git branch -M main
-git push -u origin main
-
-# 3. Create release
-git tag -a v2.0.0 -m "🎉 Transwer v2.0 - Major refactor release"
-git push origin v2.0.0
-
-# 4. Setup user environment
-python setup.py
+git clone https://github.com/yourusername/transwer.git
+cd transwer
 ```
+
+2. Create a virtual environment:
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+4. Set up environment variables:
+Create a `.env` file in the project root:
+```env
+OPENAI_API_KEY=your_openai_api_key
+GOOGLE_APPLICATION_CREDENTIALS=path/to/google/credentials.json
+```
+
+5. Download Vosk model (for offline STT):
+```bash
+mkdir -p models/vosk
+cd models/vosk
+wget https://alphacephei.com/vosk/models/vosk-model-en-us-0.22.zip
+unzip vosk-model-en-us-0.22.zip
+mv vosk-model-en-us-0.22 model
+```
+
+## 🚀 Usage
+
+1. Start the application:
+```bash
+python app.py
+```
+
+2. Open your browser and navigate to:
+```
+http://localhost:5000
+```
+
+3. Configure settings:
+   - Click the settings icon
+   - Select your audio device
+   - Choose STT and translation engines
+   - Enter API keys if using cloud services
+   - Select target language
+
+4. Start listening:
+   - Click the play button or press Ctrl+Space
+   - Speak in English
+   - See real-time transcription, translation, and suggestions
+
+## ⚙️ Configuration
+
+The application uses a `transwer_config.json` file for persistent settings:
+
+```json
+{
+  "sttEngine": "vosk",
+  "translationEngine": "openai",
+  "audioDevice": 0,
+  "translationLang": "pt-BR",
+  "apiKey": "your_api_key",
+  "googleCreds": "path/to/credentials.json",
+  "fastwhisperModel": "base",
+  "computeType": "int8",
+  "googleRegion": "us-central1"
+}
+```
+
+## 🎯 Use Cases
+
+- **International Business Meetings**: Real-time translation for global teams
+- **Language Learning**: Practice with instant translations
+- **Accessibility**: Live captions for hearing-impaired users
+- **Content Creation**: Transcribe and translate podcasts/videos
+- **Customer Support**: Multilingual support with response suggestions
+
+## 🔒 Privacy & Security
+
+- All offline modes (Vosk, Faster Whisper) process audio locally
+- Cloud services only receive audio when their engines are selected
+- API keys are stored locally and never transmitted except to their respective services
+- No audio recording or storage - all processing is real-time
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- Vosk for offline speech recognition
+- OpenAI for translation and suggestions
+- Google Cloud for speech and translation services
+- The open-source community for various libraries used

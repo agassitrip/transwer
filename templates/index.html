@@ -516,9 +516,7 @@
                 </div>
                 <div class="panel-content">
                     <div id="transcription-text" class="text-transcription">
-                        <!-- Final transcribed text / Texto transcrito final -->
                         <span id="final-text"></span>
-                        <!-- Partial (real-time) text / Texto parcial (tempo real) -->
                         <span id="partial-text" class="text-partial"></span>
                     </div>
                 </div>
@@ -572,7 +570,6 @@
                 </div>
                 <div class="panel-content">
                     <div id="suggestions-grid" class="suggestions-grid grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                        <!-- Suggestion cards will be generated here / Cards de sugestão serão gerados aqui -->
                     </div>
                 </div>
             </div>
@@ -746,9 +743,6 @@
     <!-- SCRIPTS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js"></script>
     <script>
-        // === TRANSWER FRONTEND CONTROLLER ===
-        // EN: Main application controller for Transwer
-        // PT: Controlador principal da aplicação Transwer
         class TranswerApp {
             constructor() {
                 this.socket = io();
@@ -757,8 +751,6 @@
                 this.transcriptionBuffer = '';
                 this.translationBuffer = '';
                 
-                // EN: Initialize UI elements and event listeners
-                // PT: Inicializa elementos da UI e listeners de eventos
                 this.initializeElements();
                 this.setupEventListeners();
                 this.setupResizeHandles();
@@ -767,43 +759,33 @@
                 console.log('🤖 Transwer initialized / Transwer inicializado');
             }
 
-            // === UI ELEMENT INITIALIZATION ===
-            // EN: Cache DOM elements for performance
-            // PT: Cache de elementos DOM para performance
             initializeElements() {
                 this.elements = {
-                    // Control elements / Elementos de controle
                     controlBtn: document.getElementById('control-btn'),
                     controlIcon: document.getElementById('control-icon'),
                     settingsBtn: document.getElementById('settings-btn'),
                     
-                    // Status elements / Elementos de status
                     apiStatusIndicator: document.getElementById('api-status-indicator'),
                     apiStatusText: document.getElementById('api-status-text'),
                     
-                    // Panel elements / Elementos de painel
                     transcriptionText: document.getElementById('transcription-text'),
                     finalText: document.getElementById('final-text'),
                     partialText: document.getElementById('partial-text'),
                     translationText: document.getElementById('translation-text'),
                     suggestionsGrid: document.getElementById('suggestions-grid'),
                     
-                    // Action buttons / Botões de ação
                     clearTranscriptionBtn: document.getElementById('clear-transcription-btn'),
                     forceTranslateBtn: document.getElementById('force-translate-btn'),
                     clearTranslationBtn: document.getElementById('clear-translation-btn'),
                     refreshAllSuggestionsBtn: document.getElementById('refresh-all-suggestions-btn'),
                     
-                    // Language selector / Seletor de idioma
                     langSelector: document.getElementById('lang-selector'),
                     
-                    // Settings modal / Modal de configurações
                     settingsModal: document.getElementById('settings-modal'),
                     closeModalBtn: document.getElementById('close-modal-btn'),
                     cancelSettingsBtn: document.getElementById('cancel-settings-btn'),
                     saveSettingsBtn: document.getElementById('save-settings-btn'),
                     
-                    // Settings form elements / Elementos do formulário de configurações
                     audioDeviceSelect: document.getElementById('audio-device-select'),
                     sttEngineSelect: document.getElementById('stt-engine-select'),
                     translationEngineSelect: document.getElementById('translation-engine-select'),
@@ -818,42 +800,32 @@
                     googleRegionInput: document.getElementById('google-region-input'),
                     translationOptions: document.getElementById('translation-options'),
                     
-                    // Notification / Notificação
                     notification: document.getElementById('notification')
                 };
             }
 
-            // === EVENT LISTENERS SETUP ===
-            // EN: Setup all UI event listeners
-            // PT: Configura todos os listeners de eventos da UI
             setupEventListeners() {
-                // Main control button / Botão principal de controle
                 this.elements.controlBtn.addEventListener('click', () => this.toggleProcessing());
                 
-                // Settings modal / Modal de configurações
                 this.elements.settingsBtn.addEventListener('click', () => this.openSettings());
                 this.elements.closeModalBtn.addEventListener('click', () => this.closeSettings());
                 this.elements.cancelSettingsBtn.addEventListener('click', () => this.closeSettings());
                 this.elements.saveSettingsBtn.addEventListener('click', () => this.saveSettings());
                 
-                // Action buttons / Botões de ação
                 this.elements.clearTranscriptionBtn.addEventListener('click', () => this.clearTranscription());
                 this.elements.forceTranslateBtn.addEventListener('click', () => this.forceTranslate());
                 this.elements.clearTranslationBtn.addEventListener('click', () => this.clearTranslation());
                 this.elements.refreshAllSuggestionsBtn.addEventListener('click', () => this.refreshAllSuggestions());
                 
-                // Language selector / Seletor de idioma
                 this.elements.langSelector.addEventListener('click', (e) => {
                     if (e.target.classList.contains('lang-btn')) {
                         this.changeLanguage(e.target.dataset.lang);
                     }
                 });
                 
-                // Settings form changes / Mudanças no formulário de configurações
                 this.elements.sttEngineSelect.addEventListener('change', () => this.updateSettingsUI());
                 this.elements.disableFeaturesCb.addEventListener('change', () => this.updateSettingsUI());
                 
-                // Keyboard shortcuts / Atalhos de teclado
                 document.addEventListener('keydown', (e) => {
                     if (e.key === ' ' && e.ctrlKey) {
                         e.preventDefault();
@@ -862,9 +834,6 @@
                 });
             }
 
-            // === RESIZE HANDLES SETUP ===
-            // EN: Setup panel resizing functionality
-            // PT: Configura funcionalidade de redimensionamento de painéis
             setupResizeHandles() {
                 const resizeHandles = document.querySelectorAll('.resize-handle');
                 
@@ -879,8 +848,6 @@
                         isResizing = true;
                         startY = e.clientY;
                         
-                        // EN: Find the target panel to resize
-                        // PT: Encontra o painel alvo para redimensionar
                         const targetId = handle.dataset.target;
                         targetPanel = document.getElementById(targetId);
                         startHeight = targetPanel.getBoundingClientRect().height;
@@ -888,8 +855,6 @@
                         document.addEventListener('mousemove', handleMouseMove);
                         document.addEventListener('mouseup', handleMouseUp);
                         
-                        // EN: Add visual feedback
-                        // PT: Adiciona feedback visual
                         handle.style.background = 'var(--color-primary)';
                         document.body.style.cursor = 'ns-resize';
                     });
@@ -902,8 +867,6 @@
                         const totalHeight = document.getElementById('panels-container').offsetHeight;
                         const newFlexBasis = (newHeight / totalHeight) * 100;
                         
-                        // EN: Apply new size with constraints
-                        // PT: Aplica novo tamanho com restrições
                         if (newFlexBasis >= 10 && newFlexBasis <= 70) {
                             targetPanel.style.flex = `0 0 ${newFlexBasis}%`;
                         }
@@ -916,21 +879,14 @@
                         document.removeEventListener('mousemove', handleMouseMove);
                         document.removeEventListener('mouseup', handleMouseUp);
                         
-                        // EN: Remove visual feedback
-                        // PT: Remove feedback visual
                         handle.style.background = '';
                         document.body.style.cursor = '';
                         
-                        // EN: Save layout preferences
-                        // PT: Salva preferências de layout
                         this.saveLayoutPreferences();
                     };
                 });
             }
 
-            // === SOCKET.IO HANDLERS ===
-            // EN: Setup WebSocket event handlers
-            // PT: Configura handlers de eventos WebSocket
             setupSocketHandlers() {
                 this.socket.on('connect', () => {
                     console.log('🔌 Connected to server / Conectado ao servidor');
@@ -991,24 +947,17 @@
                 });
             }
 
-            // === CORE FUNCTIONALITY ===
-            // EN: Toggle processing state
-            // PT: Alterna estado de processamento
             toggleProcessing() {
                 this.elements.controlBtn.disabled = true;
                 
                 if (this.isProcessing) {
                     this.socket.emit('stop_processing');
                 } else {
-                    // EN: Gather current settings before starting
-                    // PT: Coleta configurações atuais antes de iniciar
                     const currentSettings = this.gatherCurrentSettings();
                     this.socket.emit('start_processing', currentSettings);
                 }
             }
 
-            // EN: Gather settings from UI form
-            // PT: Coleta configurações do formulário da UI
             gatherCurrentSettings() {
                 return {
                     sttEngine: this.elements.sttEngineSelect.value,
@@ -1025,9 +974,6 @@
                 };
             }
 
-            // === UI UPDATES ===
-            // EN: Update the main control button appearance
-            // PT: Atualiza aparência do botão principal de controle
             updateControlButton() {
                 const btn = this.elements.controlBtn;
                 const icon = this.elements.controlIcon;
@@ -1055,14 +1001,10 @@
                 }
             }
 
-            // EN: Update API connection status
-            // PT: Atualiza status da conexão da API
             updateApiStatus(status, message) {
                 const indicator = this.elements.apiStatusIndicator;
                 const text = this.elements.apiStatusText;
                 
-                // EN: Remove all status classes
-                // PT: Remove todas as classes de status
                 indicator.className = 'status-indicator';
                 indicator.classList.add(`status-${status}`);
                 
@@ -1070,39 +1012,25 @@
                 indicator.title = `API Status: ${message}`;
             }
 
-            // EN: Update transcription display
-            // PT: Atualiza exibição da transcrição
             updateTranscription(data) {
                 if (data.is_partial) {
-                    // EN: Update partial (real-time) text
-                    // PT: Atualiza texto parcial (tempo real)
                     this.elements.partialText.textContent = data.text;
                 } else {
-                    // EN: Add to final text and clear partial
-                    // PT: Adiciona ao texto final e limpa parcial
                     this.transcriptionBuffer += ` ${data.text}`;
                     this.elements.finalText.textContent = this.transcriptionBuffer;
                     this.elements.partialText.textContent = '';
                     
-                    // EN: Auto-scroll to bottom
-                    // PT: Rola automaticamente para o final
                     this.elements.transcriptionText.scrollTop = this.elements.transcriptionText.scrollHeight;
                 }
             }
 
-            // EN: Update translation display
-            // PT: Atualiza exibição da tradução
             updateTranslation(data) {
                 this.translationBuffer += ` ${data.text}`;
                 this.elements.translationText.textContent = this.translationBuffer;
                 
-                // EN: Auto-scroll to bottom
-                // PT: Rola automaticamente para o final
                 this.elements.translationText.scrollTop = this.elements.translationText.scrollHeight;
             }
 
-            // EN: Update individual suggestion
-            // PT: Atualiza sugestão individual
             updateSuggestion(data) {
                 const suggestionCard = this.elements.suggestionsGrid.querySelector(`[data-index="${data.index}"]`);
                 if (suggestionCard) {
@@ -1113,9 +1041,6 @@
                 }
             }
 
-            // === UTILITY FUNCTIONS ===
-            // EN: Show notification to user
-            // PT: Mostra notificação para o usuário
             showNotification(message, type = 'info') {
                 const notification = this.elements.notification;
                 
@@ -1123,15 +1048,11 @@
                 notification.className = `notification ${type}`;
                 notification.classList.add('show');
                 
-                // EN: Auto-hide after 4 seconds
-                // PT: Oculta automaticamente após 4 segundos
                 setTimeout(() => {
                     notification.classList.remove('show');
                 }, 4000);
             }
 
-            // EN: Initialize suggestion cards
-            // PT: Inicializa cards de sugestão
             initializeSuggestions() {
                 this.elements.suggestionsGrid.innerHTML = '';
                 
@@ -1141,8 +1062,6 @@
                 }
             }
 
-            // EN: Create a suggestion card element
-            // PT: Cria elemento de card de sugestão
             createSuggestionCard(index) {
                 const card = document.createElement('div');
                 card.className = 'suggestion-card fade-in';
@@ -1164,9 +1083,6 @@
                 return card;
             }
 
-            // === ACTION HANDLERS ===
-            // EN: Clear transcription display and buffer
-            // PT: Limpa exibição e buffer da transcrição
             clearTranscription() {
                 this.transcriptionBuffer = '';
                 this.elements.finalText.textContent = '';
@@ -1174,16 +1090,12 @@
                 this.showNotification('Transcription cleared / Transcrição limpa', 'info');
             }
 
-            // EN: Clear translation display and buffer
-            // PT: Limpa exibição e buffer da tradução
             clearTranslation() {
                 this.translationBuffer = '';
                 this.elements.translationText.textContent = '';
                 this.showNotification('Translation cleared / Tradução limpa', 'info');
             }
 
-            // EN: Force translate all transcribed text
-            // PT: Força tradução de todo o texto transcrito
             forceTranslate() {
                 if (!this.transcriptionBuffer.trim()) {
                     this.showNotification('Nothing to translate / Nada para traduzir', 'warning');
@@ -1195,8 +1107,6 @@
                 this.showNotification('Forcing translation... / Forçando tradução...', 'info');
             }
 
-            // EN: Refresh individual suggestion
-            // PT: Atualiza sugestão individual
             refreshSuggestion(index) {
                 if (!this.isProcessing && !this.transcriptionBuffer.trim()) {
                     this.showNotification('Start listening to get suggestions / Inicie a escuta para obter sugestões', 'info');
@@ -1217,19 +1127,13 @@
                 });
             }
 
-            // EN: Refresh all suggestions
-            // PT: Atualiza todas as sugestões
             refreshAllSuggestions() {
                 for (let i = 0; i < 3; i++) {
                     this.refreshSuggestion(i);
                 }
             }
 
-            // EN: Change translation language quickly
-            // PT: Muda idioma de tradução rapidamente
             changeLanguage(langCode) {
-                // EN: Update UI
-                // PT: Atualiza UI
                 const langButtons = this.elements.langSelector.querySelectorAll('.lang-btn');
                 langButtons.forEach(btn => btn.classList.remove('active'));
                 
@@ -1238,42 +1142,27 @@
                     activeBtn.classList.add('active');
                 }
                 
-                // EN: Update settings
-                // PT: Atualiza configurações
                 this.elements.languageSelect.value = langCode;
                 this.saveSettings();
                 
-                // EN: Show notification
-                // PT: Mostra notificação
                 this.showNotification(`Translation language set to ${langCode} / Idioma de tradução definido para ${langCode}`, 'success');
                 
-                // EN: Re-translate if processing
-                // PT: Re-traduz se estiver processando
                 if (this.isProcessing) {
                     setTimeout(() => this.forceTranslate(), 500);
                 }
             }
 
-            // === SETTINGS MANAGEMENT ===
-            // EN: Open settings modal
-            // PT: Abre modal de configurações
             openSettings() {
                 this.elements.settingsModal.classList.remove('hidden');
                 this.elements.settingsModal.classList.add('flex');
             }
 
-            // EN: Close settings modal
-            // PT: Fecha modal de configurações
             closeSettings() {
                 this.elements.settingsModal.classList.add('hidden');
                 this.elements.settingsModal.classList.remove('flex');
             }
 
-            // EN: Load settings into UI
-            // PT: Carrega configurações na UI
             loadSettings(settings) {
-                // EN: Load from localStorage first, then server config
-                // PT: Carrega do localStorage primeiro, depois config do servidor
                 const localSettings = localStorage.getItem('transwerSettings_v9');
                 let settingsToApply = settings;
                 
@@ -1289,13 +1178,9 @@
                 this.applySettingsToUI(settingsToApply);
             }
 
-            // EN: Apply settings to UI elements
-            // PT: Aplica configurações aos elementos da UI
             applySettingsToUI(settings) {
                 if (!settings) return;
                 
-                // EN: Apply all settings to form elements
-                // PT: Aplica todas as configurações aos elementos do formulário
                 this.elements.sttEngineSelect.value = settings.sttEngine || 'vosk';
                 this.elements.translationEngineSelect.value = settings.translationEngine || 'openai';
                 this.elements.googleCredsInput.value = settings.googleCreds || '';
@@ -1307,8 +1192,6 @@
                 this.elements.fastwhisperComputeSelect.value = settings.computeType || 'int8';
                 this.elements.googleRegionInput.value = settings.googleRegion || 'us-central1';
                 
-                // EN: Update language selector in footer
-                // PT: Atualiza seletor de idioma no rodapé
                 const activeBtn = this.elements.langSelector.querySelector(`[data-lang="${settings.translationLang || 'pt-BR'}"]`);
                 if (activeBtn) {
                     this.elements.langSelector.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
@@ -1318,26 +1201,18 @@
                 this.updateSettingsUI();
             }
 
-            // EN: Update settings UI based on selections
-            // PT: Atualiza UI de configurações baseado nas seleções
             updateSettingsUI() {
                 const sttEngine = this.elements.sttEngineSelect.value;
                 const isDisabled = this.elements.disableFeaturesCb.checked;
                 
-                // EN: Show/hide engine-specific options
-                // PT: Mostra/oculta opções específicas do motor
                 this.elements.fastwhisperOptions.classList.toggle('hidden', sttEngine !== 'fast_whisper');
                 this.elements.googleRegionOption.classList.toggle('hidden', sttEngine !== 'google_chirp');
                 this.elements.translationOptions.classList.toggle('hidden', isDisabled);
             }
 
-            // EN: Save current settings
-            // PT: Salva configurações atuais
             saveSettings() {
                 const newSettings = this.gatherCurrentSettings();
                 
-                // EN: Save to localStorage and server
-                // PT: Salva no localStorage e servidor
                 localStorage.setItem('transwerSettings_v9', JSON.stringify(newSettings));
                 this.socket.emit('save_settings', newSettings);
                 this.settings = newSettings;
@@ -1346,8 +1221,6 @@
                 this.closeSettings();
             }
 
-            // EN: Populate audio device dropdown
-            // PT: Popula dropdown de dispositivos de áudio
             populateAudioDevices(devices) {
                 this.elements.audioDeviceSelect.innerHTML = '';
                 
@@ -1363,15 +1236,11 @@
                     this.elements.audioDeviceSelect.appendChild(option);
                 });
                 
-                // EN: Set selected device if in settings
-                // PT: Define dispositivo selecionado se nas configurações
                 if (this.settings.audioDevice !== undefined) {
                     this.elements.audioDeviceSelect.value = this.settings.audioDevice;
                 }
             }
 
-            // EN: Clear all displays (transcription, translation, suggestions)
-            // PT: Limpa todas as exibições (transcrição, tradução, sugestões)
             clearDisplays() {
                 this.transcriptionBuffer = '';
                 this.translationBuffer = '';
@@ -1381,8 +1250,6 @@
                 this.initializeSuggestions();
             }
 
-            // EN: Save layout preferences to localStorage
-            // PT: Salva preferências de layout no localStorage
             saveLayoutPreferences() {
                 const panels = {
                     transcription: document.getElementById('transcription-panel').style.flex,
@@ -1393,8 +1260,6 @@
                 localStorage.setItem('transwerLayout', JSON.stringify(panels));
             }
 
-            // EN: Load layout preferences from localStorage
-            // PT: Carrega preferências de layout do localStorage
             loadLayoutPreferences() {
                 const saved = localStorage.getItem('transwerLayout');
                 if (saved) {
@@ -1410,15 +1275,10 @@
             }
         }
 
-        // === APPLICATION INITIALIZATION ===
-        // EN: Initialize the application when DOM is ready
-        // PT: Inicializa a aplicação quando o DOM estiver pronto
         let app;
         document.addEventListener('DOMContentLoaded', () => {
             app = new TranswerApp();
             
-            // EN: Load layout preferences after initialization
-            // PT: Carrega preferências de layout após inicialização
             setTimeout(() => {
                 app.loadLayoutPreferences();
             }, 100);
@@ -1426,8 +1286,6 @@
             console.log('🚀 Transwer ready! / Transwer pronto!');
         });
 
-        // EN: Make app globally available for debugging
-        // PT: Torna app globalmente disponível para debug
         window.app = app;
     </script>
 </body>

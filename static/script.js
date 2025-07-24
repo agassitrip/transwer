@@ -1,12 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Establish connection with the backend
     const socket = io.connect(window.location.protocol + '//' + document.domain + ':' + location.port);
 
-    // --- STATE MANAGEMENT ---
     let currentConfig = {};
     let isListening = false;
 
-    // --- UI ELEMENTS ---
     const settingsBtn = document.getElementById('settings-btn');
     const closeModalBtn = document.getElementById('close-modal-btn');
     const cancelSettingsBtn = document.getElementById('cancel-settings-btn');
@@ -14,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const playPauseBtn = document.getElementById('play-pause-btn');
     const settingsModal = document.getElementById('settings-modal');
     
-    // Settings fields
     const apiKeyInput = document.getElementById('api-key');
     const audioDeviceSelect = document.getElementById('audio-device-select');
     const numSuggestionsSelect = document.getElementById('num-suggestions');
@@ -22,26 +18,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const languageSelect = document.getElementById('language-select');
     const disableTranslationCb = document.getElementById('disable-translation-cb');
 
-    // Display containers
     const sttContainer = document.getElementById('stt-container');
     const translationContainer = document.getElementById('translation-container');
     const suggestionsContainer = document.getElementById('suggestions-container');
     const translationWrapper = document.getElementById('translation-wrapper');
     const suggestionsWrapper = document.getElementById('suggestions-wrapper');
 
-    // Indicators & Notifications
     const apiStatusIndicator = document.getElementById('api-status-indicator');
     const apiStatusText = document.getElementById('api-status-text');
     const notification = document.getElementById('notification');
 
-    // --- ICONS ---
     const playIcon = `<svg class="w-12 h-12" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>`;
     const pauseIcon = `<svg class="w-12 h-12" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z" clip-rule="evenodd"></path></svg>`;
 
-    // --- INITIALIZATION ---
     playPauseBtn.innerHTML = playIcon;
 
-    // --- MODAL LOGIC ---
     const openModal = () => {
         settingsModal.classList.remove('hidden');
         settingsModal.classList.add('flex');
@@ -58,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === settingsModal) closeModal();
     });
 
-    // --- SETTINGS & CONFIG LOGIC ---
     function updateUIFromConfig(config) {
         apiKeyInput.value = config.apiKey || '';
         audioDeviceSelect.value = config.audio_device_id || '';
@@ -67,7 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
         languageSelect.value = config.target_language || 'en';
         disableTranslationCb.checked = config.disable_translation || false;
         
-        // Apply visibility changes
         const isDisabled = disableTranslationCb.checked;
         translationWrapper.classList.toggle('hidden', isDisabled);
         suggestionsWrapper.classList.toggle('hidden', isDisabled);
@@ -92,16 +81,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const isDisabled = e.target.checked;
         translationWrapper.classList.toggle('hidden', isDisabled);
         suggestionsWrapper.classList.toggle('hidden', isDisabled);
-        // Also save this specific change immediately for persistence
         socket.emit('save_config', { disable_translation: isDisabled });
     });
 
-    // --- CORE LISTENING LOGIC ---
     playPauseBtn.addEventListener('click', () => {
         if (isListening) {
             socket.emit('stop_listening');
         } else {
-            // Send the current client-side config to the server when starting
             const currentClientConfig = {
                 apiKey: apiKeyInput.value,
                 audio_device_id: audioDeviceSelect.value,
@@ -114,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- UI UPDATE FUNCTIONS ---
     function showNotification(message, status = 'success') {
         notification.textContent = message;
         notification.className = `fixed bottom-5 right-5 text-white py-2 px-4 rounded-lg shadow-lg transition-transform duration-300`;
@@ -132,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateApiStatus(status, message) {
-        apiStatusIndicator.className = 'w-3 h-3 rounded-full transition-colors duration-500'; // Reset
+        apiStatusIndicator.className = 'w-3 h-3 rounded-full transition-colors duration-500';
         apiStatusIndicator.classList.add(`status-${status}`);
         apiStatusIndicator.title = `API Status: ${message}`;
         apiStatusText.textContent = message;
@@ -154,7 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- SOCKET.IO EVENT HANDLERS ---
     socket.on('connect', () => console.log('Connected to server!'));
 
     socket.on('config_update', (config) => {
@@ -176,7 +160,6 @@ document.addEventListener('DOMContentLoaded', () => {
             option.textContent = device.name;
             audioDeviceSelect.appendChild(option);
         });
-        // Set the selected value based on current config
         if (currentConfig.audio_device_id) {
             audioDeviceSelect.value = currentConfig.audio_device_id;
         }
