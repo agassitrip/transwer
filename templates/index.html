@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transwer - AI Meeting Assistant</title>
+    <title>Transwer - Assistente de IA para Reuniões</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
@@ -464,13 +464,13 @@
                 <!-- API Status / Status da API -->
                 <div class="flex items-center space-x-2">
                     <div id="api-status-indicator" class="status-indicator status-inactive"></div>
-                    <span id="api-status-text" class="text-sm font-medium text-gray-300">Ready</span>
+                    <span id="api-status-text" class="text-sm font-medium text-gray-300">Pronto</span>
                 </div>
 
                 <!-- Settings Button / Botão de Configurações -->
                 <button id="settings-btn" 
                         class="rounded-lg bg-white/5 p-2 text-gray-300 transition-colors hover:bg-white/10 hover:text-white"
-                        title="Settings / Configurações">
+                        title="Configurações">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                               d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
@@ -486,7 +486,7 @@
         <!-- Control Center / Centro de Controle -->
         <div class="flex-shrink-0 p-6">
             <div class="flex items-center justify-center">
-                <button id="control-btn" class="control-btn" title="Start/Stop Listening">
+                <button id="control-btn" class="control-btn" title="Iniciar/Parar Escuta">
                     <span id="control-icon">
                         <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
@@ -504,13 +504,13 @@
                 <div class="panel-header">
                     <h2 class="panel-title text-teal-400">
                         <span class="mr-2">🎙️</span>
-                        Transcription (EN-US)
+                        Transcrição (EN-US)
                     </h2>
                     <div class="flex items-center space-x-2">
                         <button id="clear-transcription-btn" 
                                 class="rounded-md bg-teal-500/20 px-3 py-1 text-xs text-teal-300 transition-colors hover:bg-teal-500/40"
-                                title="Clear transcription / Limpar transcrição">
-                            Clear
+                                title="Limpar transcrição">
+                            Limpar
                         </button>
                     </div>
                 </div>
@@ -530,18 +530,18 @@
                 <div class="panel-header">
                     <h2 class="panel-title text-blue-400">
                         <span class="mr-2">🌐</span>
-                        Translation
+                        Tradução
                     </h2>
                     <div class="flex items-center space-x-2">
                         <button id="force-translate-btn" 
                                 class="rounded-md bg-blue-500/20 px-3 py-1 text-xs text-blue-300 transition-colors hover:bg-blue-500/40"
-                                title="Re-translate all text / Re-traduzir todo o texto">
-                            Force Translate
+                                title="Re-traduzir todo o texto">
+                            Forçar Tradução
                         </button>
                         <button id="clear-translation-btn" 
                                 class="rounded-md bg-blue-500/20 px-3 py-1 text-xs text-blue-300 transition-colors hover:bg-blue-500/40"
-                                title="Clear translation / Limpar tradução">
-                            Clear
+                                title="Limpar tradução">
+                            Limpar
                         </button>
                     </div>
                 </div>
@@ -558,13 +558,13 @@
                 <div class="panel-header">
                     <h2 class="panel-title text-purple-400">
                         <span class="mr-2">💡</span>
-                        Response Suggestions
+                        Sugestões de Resposta
                     </h2>
                     <div class="flex items-center space-x-2">
                         <button id="refresh-all-suggestions-btn" 
                                 class="rounded-md bg-purple-500/20 px-3 py-1 text-xs text-purple-300 transition-colors hover:bg-purple-500/40"
-                                title="Refresh all suggestions / Atualizar todas as sugestões">
-                            Refresh All
+                                title="Atualizar todas as sugestões">
+                            Atualizar Todas
                         </button>
                     </div>
                 </div>
@@ -582,12 +582,12 @@
         <div class="container mx-auto flex flex-col items-center justify-between gap-4 p-4 md:flex-row">
             <!-- Copyright -->
             <div class="text-sm text-gray-400">
-                Transwer © 2025 - AI Meeting Assistant
+                Transwer © 2025 - Assistente de IA para Reuniões
             </div>
 
             <!-- Quick Language Selection / Seleção Rápida de Idioma -->
             <div class="flex items-center space-x-3">
-                <span class="text-sm font-medium text-gray-300">Quick Translate:</span>
+                <span class="text-sm font-medium text-gray-300">Traduzir Para:</span>
                 <div id="lang-selector" class="flex space-x-1">
                     <button class="lang-btn" data-lang="pt-BR" title="Português (Brasil)">PT-BR</button>
                     <button class="lang-btn" data-lang="en-US" title="English (United States)">EN-US</button>
@@ -606,7 +606,7 @@
             <div class="flex items-center justify-between border-b border-white/10 p-6">
                 <h2 class="text-2xl font-bold text-white">
                     <span class="mr-2">⚙️</span>
-                    Settings / Configurações
+                    Configurações
                 </h2>
                 <button id="close-modal-btn" class="text-gray-400 hover:text-white">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -621,25 +621,25 @@
                     
                     <!-- Audio Settings / Configurações de Áudio -->
                     <div class="glass-panel p-4">
-                        <h3 class="mb-4 text-lg font-semibold text-teal-400">🎙️ Audio Settings</h3>
+                        <h3 class="mb-4 text-lg font-semibold text-teal-400">🎙️ Configurações de Áudio</h3>
                         <div class="form-group">
-                            <label class="form-label" for="audio-device-select">Input Device / Dispositivo de Entrada</label>
+                            <label class="form-label" for="audio-device-select">Dispositivo de Entrada</label>
                             <select id="audio-device-select" class="form-select">
-                                <option value="">Loading devices...</option>
+                                <option value="">Carregando dispositivos...</option>
                             </select>
                         </div>
                     </div>
 
                     <!-- STT Engine Settings / Configurações do Motor STT -->
                     <div class="glass-panel p-4">
-                        <h3 class="mb-4 text-lg font-semibold text-blue-400">🎯 Speech Recognition</h3>
+                        <h3 class="mb-4 text-lg font-semibold text-blue-400">🎯 Reconhecimento de Fala</h3>
                         <div class="form-group">
-                            <label class="form-label" for="stt-engine-select">STT Engine / Motor de Reconhecimento</label>
+                            <label class="form-label" for="stt-engine-select">Motor de Reconhecimento</label>
                             <select id="stt-engine-select" class="form-select">
-                                <option value="vosk">Vosk (Local - Fast)</option>
-                                <option value="fast_whisper">FastWhisper (Local - Accurate)</option>
-                                <option value="google_stt_legacy">Google STT (Cloud - Legacy)</option>
-                                <option value="google_chirp">Google Chirp (Cloud - v2)</option>
+                                <option value="vosk">Vosk (Local - Rápido)</option>
+                                <option value="fast_whisper">FastWhisper (Local - Preciso)</option>
+                                <option value="google_stt_legacy">Google STT (Nuvem - Legado)</option>
+                                <option value="google_chirp">Google Chirp (Nuvem - v2)</option>
                             </select>
                         </div>
                         
@@ -671,7 +671,7 @@
 
                     <!-- Translation Settings / Configurações de Tradução -->
                     <div class="glass-panel p-4">
-                        <h3 class="mb-4 text-lg font-semibold text-purple-400">🌐 Translation & AI</h3>
+                        <h3 class="mb-4 text-lg font-semibold text-purple-400">🌐 Tradução e IA</h3>
                         
                         <div class="form-group">
                             <label class="flex items-center space-x-2">
@@ -704,7 +704,7 @@
 
                     <!-- API Credentials / Credenciais da API -->
                     <div class="glass-panel p-4">
-                        <h3 class="mb-4 text-lg font-semibold text-yellow-400">🔑 API Credentials</h3>
+                        <h3 class="mb-4 text-lg font-semibold text-yellow-400">🔑 Credenciais da API</h3>
                         
                         <div class="form-group">
                             <label class="form-label" for="api-key-input">OpenAI API Key</label>
@@ -726,11 +726,11 @@
                 <div class="flex justify-end space-x-4">
                     <button id="cancel-settings-btn" 
                             class="rounded-lg bg-gray-600 px-4 py-2 font-medium text-white transition-colors hover:bg-gray-500">
-                        Cancel / Cancelar
+                        Cancelar
                     </button>
                     <button id="save-settings-btn" 
                             class="rounded-lg bg-teal-600 px-4 py-2 font-medium text-white transition-colors hover:bg-teal-500">
-                        Save & Close / Salvar e Fechar
+                        Salvar e Fechar
                     </button>
                 </div>
             </div>
@@ -743,49 +743,75 @@
     <!-- SCRIPTS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js"></script>
     <script>
+        /**
+         * Classe principal da aplicação Transwer
+         * Gerencia transcrição de fala para texto e tradução em tempo real
+         * @class TranswerApp
+         */
         class TranswerApp {
+            /**
+             * Construtor da aplicação - inicializa componentes e conexões
+             * @constructor
+             */
             constructor() {
+                // Conexão WebSocket para comunicação em tempo real com o servidor
                 this.socket = io();
+                // Flag que indica se o processamento de áudio está ativo
                 this.isProcessing = false;
+                // Armazena as configurações da aplicação
                 this.settings = {};
+                // Buffer temporário para acumular texto transcrito
                 this.transcriptionBuffer = '';
+                // Buffer temporário para acumular texto traduzido
                 this.translationBuffer = '';
                 
+                // Inicializa todos os componentes da aplicação
                 this.initializeElements();
                 this.setupEventListeners();
                 this.setupResizeHandles();
                 this.setupSocketHandlers();
                 
-                console.log('🤖 Transwer initialized / Transwer inicializado');
+                console.log('🤖 Transwer inicializado');
             }
 
+            /**
+             * Inicializa referências para todos os elementos DOM da interface
+             * Organiza elementos por categoria para facilitar acesso posterior
+             */
             initializeElements() {
                 this.elements = {
+                    // Controles principais da aplicação
                     controlBtn: document.getElementById('control-btn'),
                     controlIcon: document.getElementById('control-icon'),
                     settingsBtn: document.getElementById('settings-btn'),
                     
+                    // Indicadores de status da API
                     apiStatusIndicator: document.getElementById('api-status-indicator'),
                     apiStatusText: document.getElementById('api-status-text'),
                     
+                    // Elementos de exibição de texto (transcrição e tradução)
                     transcriptionText: document.getElementById('transcription-text'),
                     finalText: document.getElementById('final-text'),
                     partialText: document.getElementById('partial-text'),
                     translationText: document.getElementById('translation-text'),
                     suggestionsGrid: document.getElementById('suggestions-grid'),
                     
+                    // Botões de ação para gerenciar conteúdo
                     clearTranscriptionBtn: document.getElementById('clear-transcription-btn'),
                     forceTranslateBtn: document.getElementById('force-translate-btn'),
                     clearTranslationBtn: document.getElementById('clear-translation-btn'),
                     refreshAllSuggestionsBtn: document.getElementById('refresh-all-suggestions-btn'),
                     
+                    // Seletor rápido de idiomas
                     langSelector: document.getElementById('lang-selector'),
                     
+                    // Modal de configurações e seus controles
                     settingsModal: document.getElementById('settings-modal'),
                     closeModalBtn: document.getElementById('close-modal-btn'),
                     cancelSettingsBtn: document.getElementById('cancel-settings-btn'),
                     saveSettingsBtn: document.getElementById('save-settings-btn'),
                     
+                    // Campos de configuração dentro do modal
                     audioDeviceSelect: document.getElementById('audio-device-select'),
                     sttEngineSelect: document.getElementById('stt-engine-select'),
                     translationEngineSelect: document.getElementById('translation-engine-select'),
@@ -800,32 +826,43 @@
                     googleRegionInput: document.getElementById('google-region-input'),
                     translationOptions: document.getElementById('translation-options'),
                     
+                    // Sistema de notificações
                     notification: document.getElementById('notification')
                 };
             }
 
+            /**
+             * Configura todos os event listeners da interface
+             * Conecta elementos da UI às suas respectivas funções
+             */
             setupEventListeners() {
+                // Botão principal para iniciar/parar processamento de áudio
                 this.elements.controlBtn.addEventListener('click', () => this.toggleProcessing());
                 
+                // Controles do modal de configurações
                 this.elements.settingsBtn.addEventListener('click', () => this.openSettings());
                 this.elements.closeModalBtn.addEventListener('click', () => this.closeSettings());
                 this.elements.cancelSettingsBtn.addEventListener('click', () => this.closeSettings());
                 this.elements.saveSettingsBtn.addEventListener('click', () => this.saveSettings());
                 
+                // Botões de ação para gerenciar conteúdo exibido
                 this.elements.clearTranscriptionBtn.addEventListener('click', () => this.clearTranscription());
                 this.elements.forceTranslateBtn.addEventListener('click', () => this.forceTranslate());
                 this.elements.clearTranslationBtn.addEventListener('click', () => this.clearTranslation());
                 this.elements.refreshAllSuggestionsBtn.addEventListener('click', () => this.refreshAllSuggestions());
                 
+                // Seletor rápido de idiomas - detecta cliques em botões de idioma
                 this.elements.langSelector.addEventListener('click', (e) => {
                     if (e.target.classList.contains('lang-btn')) {
                         this.changeLanguage(e.target.dataset.lang);
                     }
                 });
                 
+                // Listeners para atualizar a UI quando configurações mudam
                 this.elements.sttEngineSelect.addEventListener('change', () => this.updateSettingsUI());
                 this.elements.disableFeaturesCb.addEventListener('change', () => this.updateSettingsUI());
                 
+                // Atalho de teclado: Ctrl+Espaço para iniciar/parar processamento
                 document.addEventListener('keydown', (e) => {
                     if (e.key === ' ' && e.ctrlKey) {
                         e.preventDefault();
@@ -834,165 +871,215 @@
                 });
             }
 
+            /**
+             * Configura as alças de redimensionamento dos painéis
+             * Permite ao usuário ajustar o tamanho dos painéis arrastando as bordas
+             */
             setupResizeHandles() {
                 const resizeHandles = document.querySelectorAll('.resize-handle');
                 
                 resizeHandles.forEach(handle => {
+                    // Variáveis para controlar o estado do redimensionamento
                     let isResizing = false;
                     let startY = 0;
                     let startHeight = 0;
                     let targetPanel = null;
                     
+                    // Inicia o redimensionamento quando o usuário clica na alça
                     handle.addEventListener('mousedown', (e) => {
                         e.preventDefault();
                         isResizing = true;
                         startY = e.clientY;
                         
+                        // Identifica qual painel será redimensionado
                         const targetId = handle.dataset.target;
                         targetPanel = document.getElementById(targetId);
                         startHeight = targetPanel.getBoundingClientRect().height;
                         
+                        // Adiciona listeners globais para capturar movimento do mouse
                         document.addEventListener('mousemove', handleMouseMove);
                         document.addEventListener('mouseup', handleMouseUp);
                         
+                        // Feedback visual durante o redimensionamento
                         handle.style.background = 'var(--color-primary)';
                         document.body.style.cursor = 'ns-resize';
                     });
                     
+                    // Atualiza o tamanho do painel durante o movimento do mouse
                     const handleMouseMove = (e) => {
                         if (!isResizing || !targetPanel) return;
                         
+                        // Calcula nova altura baseada no movimento do mouse
                         const deltaY = e.clientY - startY;
                         const newHeight = Math.max(100, startHeight + deltaY);
                         const totalHeight = document.getElementById('panels-container').offsetHeight;
                         const newFlexBasis = (newHeight / totalHeight) * 100;
                         
+                        // Aplica limites mínimos e máximos (10% a 70%)
                         if (newFlexBasis >= 10 && newFlexBasis <= 70) {
                             targetPanel.style.flex = `0 0 ${newFlexBasis}%`;
                         }
                     };
                     
+                    // Finaliza o redimensionamento e salva as preferências
                     const handleMouseUp = () => {
                         isResizing = false;
                         targetPanel = null;
                         
+                        // Remove listeners globais
                         document.removeEventListener('mousemove', handleMouseMove);
                         document.removeEventListener('mouseup', handleMouseUp);
                         
+                        // Restaura aparência normal
                         handle.style.background = '';
                         document.body.style.cursor = '';
                         
+                        // Salva o novo layout no localStorage
                         this.saveLayoutPreferences();
                     };
                 });
             }
 
+            /**
+             * Configura os manipuladores de eventos WebSocket
+             * Define como a aplicação responde a mensagens do servidor
+             */
             setupSocketHandlers() {
+                // Conectado ao servidor - inicializa a aplicação
                 this.socket.on('connect', () => {
-                    console.log('🔌 Connected to server / Conectado ao servidor');
-                    this.updateApiStatus('inactive', 'Ready / Pronto');
+                    console.log('🔌 Conectado ao servidor');
+                    this.updateApiStatus('inactive', 'Pronto');
                     this.initializeSuggestions();
                 });
 
+                // Desconectado do servidor - mostra erro
                 this.socket.on('disconnect', () => {
-                    console.log('⚠️ Disconnected from server / Desconectado do servidor');
-                    this.updateApiStatus('error', 'Disconnected / Desconectado');
+                    console.log('⚠️ Desconectado do servidor');
+                    this.updateApiStatus('error', 'Desconectado');
                 });
 
+                // Configurações carregadas do servidor
                 this.socket.on('config_loaded', (config) => {
-                    console.log('⚙️ Settings loaded / Configurações carregadas', config);
+                    console.log('⚙️ Configurações carregadas', config);
                     this.loadSettings(config);
                 });
 
+                // Lista de dispositivos de áudio disponíveis
                 this.socket.on('audio_devices_list', (devices) => {
                     this.populateAudioDevices(devices);
                 });
 
+                // Processamento de áudio iniciado
                 this.socket.on('processing_started', () => {
                     this.isProcessing = true;
                     this.updateControlButton();
-                    this.updateApiStatus('active', 'Listening... / Ouvindo...');
+                    this.updateApiStatus('active', 'Ouvindo...');
                     this.clearDisplays();
                 });
 
+                // Processamento de áudio interrompido
                 this.socket.on('processing_stopped', () => {
                     this.isProcessing = false;
                     this.updateControlButton();
-                    this.updateApiStatus('inactive', 'Paused / Pausado');
+                    this.updateApiStatus('inactive', 'Pausado');
                 });
 
+                // Novo texto transcrito recebido (STT - Speech to Text)
                 this.socket.on('update_stt', (data) => {
                     this.updateTranscription(data);
                 });
 
+                // Nova tradução recebida
                 this.socket.on('update_translation', (data) => {
                     this.updateTranslation(data);
                 });
 
+                // Comando para limpar área de tradução
                 this.socket.on('clear_translation', () => {
                     this.elements.translationText.textContent = '';
                     this.translationBuffer = '';
                 });
 
+                // Atualização de uma sugestão específica
                 this.socket.on('update_one_suggestion', (data) => {
                     this.updateSuggestion(data);
                 });
 
+                // Notificação do servidor para exibir ao usuário
                 this.socket.on('notification', (data) => {
                     this.showNotification(data.message, data.status);
                 });
 
+                // Atualização do status da API
                 this.socket.on('api_status', (data) => {
                     this.updateApiStatus(data.status, data.message);
                 });
             }
 
+            /**
+             * Alterna entre iniciar e parar o processamento de áudio
+             * Função principal da aplicação - controla a captura e processamento de fala
+             */
             toggleProcessing() {
+                // Desabilita o botão temporariamente para evitar cliques múltiplos
                 this.elements.controlBtn.disabled = true;
                 
                 if (this.isProcessing) {
+                    // Se já está processando, para o processamento
                     this.socket.emit('stop_processing');
                 } else {
+                    // Se não está processando, inicia com as configurações atuais
                     const currentSettings = this.gatherCurrentSettings();
                     this.socket.emit('start_processing', currentSettings);
                 }
             }
 
+            /**
+             * Coleta todas as configurações atuais da interface
+             * @returns {Object} Objeto com todas as configurações para enviar ao servidor
+             */
             gatherCurrentSettings() {
                 return {
-                    sttEngine: this.elements.sttEngineSelect.value,
-                    translationEngine: this.elements.translationEngineSelect.value,
-                    googleCreds: this.elements.googleCredsInput.value,
-                    apiKey: this.elements.apiKeyInput.value,
-                    audioDevice: parseInt(this.elements.audioDeviceSelect.value, 10),
-                    translationLang: this.elements.languageSelect.value,
-                    translationDisabled: this.elements.disableFeaturesCb.checked,
-                    suggestionsEnabled: !this.elements.disableFeaturesCb.checked,
-                    fastwhisperModel: this.elements.fastwhisperModelSelect.value,
-                    computeType: this.elements.fastwhisperComputeSelect.value,
-                    googleRegion: this.elements.googleRegionInput.value
+                    sttEngine: this.elements.sttEngineSelect.value,                    // Engine de transcrição (Vosk, Whisper, etc.)
+                    translationEngine: this.elements.translationEngineSelect.value,  // Engine de tradução (OpenAI, Google, etc.)
+                    googleCreds: this.elements.googleCredsInput.value,               // Credenciais do Google Cloud
+                    apiKey: this.elements.apiKeyInput.value,                         // Chave da API (OpenAI, etc.)
+                    audioDevice: parseInt(this.elements.audioDeviceSelect.value, 10), // ID do dispositivo de áudio
+                    translationLang: this.elements.languageSelect.value,             // Idioma de destino da tradução
+                    translationDisabled: this.elements.disableFeaturesCb.checked,    // Se tradução está desabilitada
+                    suggestionsEnabled: !this.elements.disableFeaturesCb.checked,    // Se sugestões estão habilitadas
+                    fastwhisperModel: this.elements.fastwhisperModelSelect.value,     // Modelo do FastWhisper
+                    computeType: this.elements.fastwhisperComputeSelect.value,       // Tipo de computação (int8, float16, etc.)
+                    googleRegion: this.elements.googleRegionInput.value              // Região do Google Cloud
                 };
             }
 
+            /**
+             * Atualiza a aparência e comportamento do botão de controle principal
+             * Alterna entre ícone de play/pause baseado no estado atual
+             */
             updateControlButton() {
                 const btn = this.elements.controlBtn;
                 const icon = this.elements.controlIcon;
                 
+                // Reabilita o botão após um breve delay para evitar spam de cliques
                 setTimeout(() => {
                     btn.disabled = false;
                 }, 500);
                 
                 if (this.isProcessing) {
+                    // Estado: Processando - mostra ícone de stop
                     btn.classList.add('processing');
-                    btn.title = 'Stop Listening / Parar de Ouvir';
+                    btn.title = 'Parar de Ouvir';
                     icon.innerHTML = `
                         <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z" clip-rule="evenodd"/>
                         </svg>
                     `;
                 } else {
+                    // Estado: Parado - mostra ícone de play
                     btn.classList.remove('processing');
-                    btn.title = 'Start Listening / Iniciar Escuta';
+                    btn.title = 'Iniciar Escuta';
                     icon.innerHTML = `
                         <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
@@ -1001,78 +1088,122 @@
                 }
             }
 
+            /**
+             * Atualiza o indicador visual do status da API
+             * @param {string} status - Status atual: 'active', 'inactive', 'error'
+             * @param {string} message - Mensagem descritiva do status
+             */
             updateApiStatus(status, message) {
                 const indicator = this.elements.apiStatusIndicator;
                 const text = this.elements.apiStatusText;
                 
+                // Remove classes anteriores e adiciona a classe do status atual
                 indicator.className = 'status-indicator';
                 indicator.classList.add(`status-${status}`);
                 
+                // Atualiza texto e tooltip
                 text.textContent = message;
                 indicator.title = `API Status: ${message}`;
             }
 
+            /**
+             * Atualiza o texto de transcrição na interface
+             * @param {Object} data - Dados da transcrição com texto e flag is_partial
+             */
             updateTranscription(data) {
                 if (data.is_partial) {
+                    // Texto parcial (ainda sendo processado) - exibe em área temporária
                     this.elements.partialText.textContent = data.text;
                 } else {
+                    // Texto final - adiciona ao buffer permanente e limpa área parcial
                     this.transcriptionBuffer += ` ${data.text}`;
                     this.elements.finalText.textContent = this.transcriptionBuffer;
                     this.elements.partialText.textContent = '';
                     
+                    // Auto-scroll para mostrar o texto mais recente
                     this.elements.transcriptionText.scrollTop = this.elements.transcriptionText.scrollHeight;
                 }
             }
 
+            /**
+             * Atualiza o texto de tradução na interface
+             * @param {Object} data - Dados da tradução com o texto traduzido
+             */
             updateTranslation(data) {
+                // Adiciona novo texto traduzido ao buffer
                 this.translationBuffer += ` ${data.text}`;
                 this.elements.translationText.textContent = this.translationBuffer;
                 
+                // Auto-scroll para mostrar a tradução mais recente
                 this.elements.translationText.scrollTop = this.elements.translationText.scrollHeight;
             }
 
+            /**
+             * Atualiza uma sugestão específica na grade de sugestões
+             * @param {Object} data - Dados da sugestão com índice e texto
+             */
             updateSuggestion(data) {
                 const suggestionCard = this.elements.suggestionsGrid.querySelector(`[data-index="${data.index}"]`);
                 if (suggestionCard) {
                     const textElement = suggestionCard.querySelector('.suggestion-text');
                     textElement.textContent = data.suggestion;
+                    // Muda cor para indicar que a sugestão foi atualizada
                     textElement.classList.remove('text-gray-400');
                     textElement.classList.add('text-white');
                 }
             }
 
+            /**
+             * Exibe uma notificação temporária para o usuário
+             * @param {string} message - Mensagem a ser exibida
+             * @param {string} type - Tipo da notificação: 'info', 'success', 'warning', 'error'
+             */
             showNotification(message, type = 'info') {
                 const notification = this.elements.notification;
                 
+                // Define o conteúdo e estilo da notificação
                 notification.textContent = message;
                 notification.className = `notification ${type}`;
                 notification.classList.add('show');
                 
+                // Remove a notificação automaticamente após 4 segundos
                 setTimeout(() => {
                     notification.classList.remove('show');
                 }, 4000);
             }
 
+            /**
+             * Inicializa a grade de sugestões com cards vazios
+             * Cria 3 cards de sugestão padrão
+             */
             initializeSuggestions() {
+                // Limpa sugestões existentes
                 this.elements.suggestionsGrid.innerHTML = '';
                 
+                // Cria 3 cards de sugestão
                 for (let i = 0; i < 3; i++) {
                     const card = this.createSuggestionCard(i);
                     this.elements.suggestionsGrid.appendChild(card);
                 }
             }
 
+            /**
+             * Cria um card de sugestão individual
+             * @param {number} index - Índice da sugestão (0, 1 ou 2)
+             * @returns {HTMLElement} Elemento DOM do card criado
+             */
             createSuggestionCard(index) {
                 const card = document.createElement('div');
                 card.className = 'suggestion-card fade-in';
                 card.dataset.index = index;
                 
+                // Template HTML do card com texto placeholder e botão de refresh
                 card.innerHTML = `
                     <div class="suggestion-text text-gray-400">
-                        Waiting for transcription...
+                        Aguardando transcrição...
                     </div>
                     <div class="suggestion-actions">
-                        <button class="suggestion-btn" onclick="app.refreshSuggestion(${index})" title="Refresh suggestion">
+                        <button class="suggestion-btn" onclick="app.refreshSuggestion(${index})" title="Atualizar sugestão">
                             <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 110 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
                             </svg>
@@ -1083,89 +1214,133 @@
                 return card;
             }
 
+            /**
+             * Limpa todo o conteúdo da área de transcrição
+             * Remove tanto texto final quanto parcial
+             */
             clearTranscription() {
                 this.transcriptionBuffer = '';
                 this.elements.finalText.textContent = '';
                 this.elements.partialText.textContent = '';
-                this.showNotification('Transcription cleared / Transcrição limpa', 'info');
+                this.showNotification('Transcrição limpa', 'info');
             }
 
+            /**
+             * Limpa todo o conteúdo da área de tradução
+             */
             clearTranslation() {
                 this.translationBuffer = '';
                 this.elements.translationText.textContent = '';
-                this.showNotification('Translation cleared / Tradução limpa', 'info');
+                this.showNotification('Tradução limpa', 'info');
             }
 
+            /**
+             * Força a tradução do texto transcrito atual
+             * Útil quando a tradução automática não funcionou
+             */
             forceTranslate() {
+                // Verifica se há texto para traduzir
                 if (!this.transcriptionBuffer.trim()) {
-                    this.showNotification('Nothing to translate / Nada para traduzir', 'warning');
+                    this.showNotification('Nada para traduzir', 'warning');
                     return;
                 }
                 
+                // Solicita tradução manual ao servidor
                 const currentSettings = this.gatherCurrentSettings();
                 this.socket.emit('force_translate', currentSettings);
-                this.showNotification('Forcing translation... / Forçando tradução...', 'info');
+                this.showNotification('Forçando tradução...', 'info');
             }
 
+            /**
+             * Regenera uma sugestão específica
+             * @param {number} index - Índice da sugestão a ser regenerada (0, 1 ou 2)
+             */
             refreshSuggestion(index) {
+                // Verifica se há conteúdo para gerar sugestões
                 if (!this.isProcessing && !this.transcriptionBuffer.trim()) {
-                    this.showNotification('Start listening to get suggestions / Inicie a escuta para obter sugestões', 'info');
+                    this.showNotification('Inicie a escuta para obter sugestões', 'info');
                     return;
                 }
                 
                 const currentSettings = this.gatherCurrentSettings();
                 currentSettings.index = index;
                 
+                // Atualiza UI para mostrar estado de carregamento
                 const card = this.elements.suggestionsGrid.querySelector(`[data-index="${index}"]`);
                 const textElement = card.querySelector('.suggestion-text');
-                textElement.textContent = 'Generating...';
+                textElement.textContent = 'Gerando...';
                 textElement.className = 'suggestion-text text-gray-400';
                 
+                // Solicita nova sugestão ao servidor
                 this.socket.emit('regenerate_suggestion', {
                     index: index,
                     config: currentSettings
                 });
             }
 
+            /**
+             * Regenera todas as sugestões de uma vez
+             * Chama refreshSuggestion para cada um dos 3 cards
+             */
             refreshAllSuggestions() {
                 for (let i = 0; i < 3; i++) {
                     this.refreshSuggestion(i);
                 }
             }
 
+            /**
+             * Altera o idioma de destino da tradução
+             * @param {string} langCode - Código do idioma (ex: 'pt-BR', 'en', 'es')
+             */
             changeLanguage(langCode) {
+                // Remove seleção de todos os botões de idioma
                 const langButtons = this.elements.langSelector.querySelectorAll('.lang-btn');
                 langButtons.forEach(btn => btn.classList.remove('active'));
                 
+                // Marca o botão do idioma selecionado como ativo
                 const activeBtn = this.elements.langSelector.querySelector(`[data-lang="${langCode}"]`);
                 if (activeBtn) {
                     activeBtn.classList.add('active');
                 }
                 
+                // Atualiza o select de idioma e salva configurações
                 this.elements.languageSelect.value = langCode;
                 this.saveSettings();
                 
-                this.showNotification(`Translation language set to ${langCode} / Idioma de tradução definido para ${langCode}`, 'success');
+                this.showNotification(`Idioma de tradução definido para ${langCode}`, 'success');
                 
+                // Se estiver processando, força nova tradução com o novo idioma
                 if (this.isProcessing) {
                     setTimeout(() => this.forceTranslate(), 500);
                 }
             }
 
+            /**
+             * Abre o modal de configurações
+             */
             openSettings() {
                 this.elements.settingsModal.classList.remove('hidden');
                 this.elements.settingsModal.classList.add('flex');
             }
 
+            /**
+             * Fecha o modal de configurações sem salvar
+             */
             closeSettings() {
                 this.elements.settingsModal.classList.add('hidden');
                 this.elements.settingsModal.classList.remove('flex');
             }
 
+            /**
+             * Carrega configurações, priorizando configurações locais sobre as do servidor
+             * @param {Object} settings - Configurações recebidas do servidor
+             */
             loadSettings(settings) {
+                // Tenta carregar configurações salvas localmente
                 const localSettings = localStorage.getItem('transwerSettings_v9');
                 let settingsToApply = settings;
                 
+                // Prioriza configurações locais se existirem
                 if (localSettings) {
                     try {
                         settingsToApply = JSON.parse(localSettings);
@@ -1174,13 +1349,19 @@
                     }
                 }
                 
+                // Aplica as configurações à interface
                 this.settings = settingsToApply;
                 this.applySettingsToUI(settingsToApply);
             }
 
+            /**
+             * Aplica configurações carregadas aos elementos da interface
+             * @param {Object} settings - Objeto com todas as configurações
+             */
             applySettingsToUI(settings) {
                 if (!settings) return;
                 
+                // Aplica valores aos campos de configuração com fallbacks padrão
                 this.elements.sttEngineSelect.value = settings.sttEngine || 'vosk';
                 this.elements.translationEngineSelect.value = settings.translationEngine || 'openai';
                 this.elements.googleCredsInput.value = settings.googleCreds || '';
@@ -1192,64 +1373,98 @@
                 this.elements.fastwhisperComputeSelect.value = settings.computeType || 'int8';
                 this.elements.googleRegionInput.value = settings.googleRegion || 'us-central1';
                 
+                // Atualiza seleção visual do idioma no seletor rápido
                 const activeBtn = this.elements.langSelector.querySelector(`[data-lang="${settings.translationLang || 'pt-BR'}"]`);
                 if (activeBtn) {
                     this.elements.langSelector.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
                     activeBtn.classList.add('active');
                 }
                 
+                // Atualiza visibilidade de seções baseada nas configurações
                 this.updateSettingsUI();
             }
 
+            /**
+             * Atualiza a interface de configurações baseada nas seleções atuais
+             * Mostra/esconde opções específicas de cada engine
+             */
             updateSettingsUI() {
                 const sttEngine = this.elements.sttEngineSelect.value;
                 const isDisabled = this.elements.disableFeaturesCb.checked;
                 
+                // Mostra opções do FastWhisper apenas quando selecionado
                 this.elements.fastwhisperOptions.classList.toggle('hidden', sttEngine !== 'fast_whisper');
+                // Mostra opções de região do Google apenas quando Google Chirp for selecionado
                 this.elements.googleRegionOption.classList.toggle('hidden', sttEngine !== 'google_chirp');
+                // Esconde opções de tradução quando recursos estão desabilitados
                 this.elements.translationOptions.classList.toggle('hidden', isDisabled);
             }
 
+            /**
+             * Salva as configurações atuais tanto localmente quanto no servidor
+             */
             saveSettings() {
                 const newSettings = this.gatherCurrentSettings();
                 
+                // Salva no localStorage para persistência local
                 localStorage.setItem('transwerSettings_v9', JSON.stringify(newSettings));
+                // Envia para o servidor
                 this.socket.emit('save_settings', newSettings);
+                // Atualiza configurações na memória
                 this.settings = newSettings;
                 
-                this.showNotification('Settings saved! / Configurações salvas!', 'success');
+                this.showNotification('Configurações salvas!', 'success');
                 this.closeSettings();
             }
 
+            /**
+             * Popula a lista de dispositivos de áudio disponíveis
+             * @param {Array} devices - Lista de dispositivos de áudio do sistema
+             */
             populateAudioDevices(devices) {
                 this.elements.audioDeviceSelect.innerHTML = '';
                 
+                // Verifica se há dispositivos disponíveis
                 if (!devices || devices.length === 0) {
-                    this.elements.audioDeviceSelect.innerHTML = '<option value="">No devices found</option>';
+                    this.elements.audioDeviceSelect.innerHTML = '<option value="">Nenhum dispositivo encontrado</option>';
                     return;
                 }
                 
+                // Cria opção para cada dispositivo encontrado
                 devices.forEach(device => {
                     const option = document.createElement('option');
                     option.value = device.id;
+                    // Limita o nome do dispositivo a 50 caracteres para evitar overflow
                     option.textContent = `${device.id}: ${device.name.substring(0, 50)}${device.name.length > 50 ? '...' : ''}`;
                     this.elements.audioDeviceSelect.appendChild(option);
                 });
                 
+                // Seleciona o dispositivo salvo nas configurações
                 if (this.settings.audioDevice !== undefined) {
                     this.elements.audioDeviceSelect.value = this.settings.audioDevice;
                 }
             }
 
+            /**
+             * Limpa todas as áreas de exibição quando inicia novo processamento
+             * Reset completo da interface de conteúdo
+             */
             clearDisplays() {
+                // Limpa buffers de texto
                 this.transcriptionBuffer = '';
                 this.translationBuffer = '';
+                // Limpa elementos de texto na UI
                 this.elements.finalText.textContent = '';
                 this.elements.partialText.textContent = '';
                 this.elements.translationText.textContent = '';
+                // Reinicializa sugestões
                 this.initializeSuggestions();
             }
 
+            /**
+             * Salva as preferências de layout dos painéis no localStorage
+             * Preserva o tamanho personalizado dos painéis entre sessões
+             */
             saveLayoutPreferences() {
                 const panels = {
                     transcription: document.getElementById('transcription-panel').style.flex,
@@ -1260,11 +1475,16 @@
                 localStorage.setItem('transwerLayout', JSON.stringify(panels));
             }
 
+            /**
+             * Carrega as preferências de layout salvas e aplica aos painéis
+             * Restaura o tamanho personalizado dos painéis da sessão anterior
+             */
             loadLayoutPreferences() {
                 const saved = localStorage.getItem('transwerLayout');
                 if (saved) {
                     try {
                         const panels = JSON.parse(saved);
+                        // Aplica tamanhos salvos a cada painel se existirem
                         if (panels.transcription) document.getElementById('transcription-panel').style.flex = panels.transcription;
                         if (panels.translation) document.getElementById('translation-panel').style.flex = panels.translation;
                         if (panels.suggestions) document.getElementById('suggestions-panel').style.flex = panels.suggestions;
@@ -1275,17 +1495,26 @@
             }
         }
 
+        // Variável global para instância da aplicação
         let app;
+        
+        /**
+         * Inicialização da aplicação quando o DOM estiver carregado
+         * Cria instância principal e carrega preferências salvas
+         */
         document.addEventListener('DOMContentLoaded', () => {
+            // Cria instância principal da aplicação
             app = new TranswerApp();
             
+            // Carrega preferências de layout com pequeno delay para garantir renderização
             setTimeout(() => {
                 app.loadLayoutPreferences();
             }, 100);
             
-            console.log('🚀 Transwer ready! / Transwer pronto!');
+            console.log('🚀 Transwer pronto!');
         });
 
+        // Disponibiliza a instância globalmente para callbacks inline
         window.app = app;
     </script>
 </body>
